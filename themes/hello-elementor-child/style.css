@@ -1,0 +1,1058 @@
+/*
+Theme Name: Hello Elementor Child
+Theme URI: https://elementor.com/hello-theme/?utm_source=wp-themes&utm_campaign=theme-uri&utm_medium=wp-dash
+Template: hello-elementor
+Author: Elementor Team
+Author URI: https://elementor.com/?utm_source=wp-themes&utm_campaign=author-uri&utm_medium=wp-dash
+Description: Hello Elementor is a lightweight and minimalist WordPress theme that was built specifically to work seamlessly with the Elementor page builder plugin. The theme is free, open-source, and designed for users who want a flexible, easy-to-use, and customizable website. The theme, which is optimized for performance, provides a solid foundation for users to build their own unique designs using the Elementor drag-and-drop site builder. Its simplicity and flexibility make it a great choice for both beginners and experienced Web Creators.
+Tags: accessibility-ready,flexible-header,custom-colors,custom-menu,custom-logo,featured-images,rtl-language-support,threaded-comments,translation-ready
+Version: 2.9.0.1702895689
+Updated: 2023-12-18 10:34:49
+
+*/
+
+/* .property-tiles-container {
+    display: flex;
+    flex-wrap: wrap;
+} */
+.property-tiles-container-2 {
+    display: flex;
+    flex-wrap: wrap;
+    /* align-content: stretch;
+    align-items: center; */
+}
+
+.pagination {
+    text-align: center;
+}
+
+.property-tile {
+    width: calc(33.333% - 20px);
+    /* Adjust width as needed, considering margins */
+    margin: 10px;
+    box-sizing: border-box;
+    position: relative;
+
+}
+body .properties-extra-info h5 {
+    color: #FFF;
+    font-family: "FS Lola Regular", Sans-serif !important;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 135%;
+    text-transform: capitalize;
+    margin: 0px;
+}
+.jump-list ul li{
+    background-color: #fff;
+    border-style: solid;
+    border-width: 1px 1px 1px 1px;
+    border-color: var(--e-global-color-accent);
+    font-size: 18px !important;
+    padding: 13.5px !important;
+    height: 54px;
+    border-radius: 54px;
+    font-family: "FS Lola Regular", Sans-serif;
+    font-weight: normal;
+	margin-bottom: 5px !important;
+    margin-top: 5px !important;
+}
+.jump-list ul li:hover{
+    background-color: #C2BB86;
+    color: #fff !important;
+}
+.jump-list ul li:hover a span{
+    color: #fff !important;
+}
+.map-button a.elementor-button{
+    width:100%;
+    text-shadow: none;
+}
+.jump-list ul li:first-child{
+    background: transparent !important;
+    border: 0;
+    color: #003655 !important;
+    line-height: 30.8px;
+    letter-spacing: -0.22px;
+}
+.jump-list ul li:first-child span {
+    color: #003655 !important;
+}
+body .property-tiles-container .icon-listing li {
+    font-size: 19px !important;
+    font-family: "FS Lola Regular", Sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 24px;
+}
+body .property-tiles-container-2 .icon-listing li{
+    font-size: 19px !important;
+    font-family: "FS Lola Regular", Sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 24px;
+}
+.properties-banner .baner-image h1{
+    letter-spacing: 4.71px;
+}
+.properties-banner p{
+    font-family: "FS Lola Regular", Sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 24px;
+}
+.saved-properties, #price_sorting{
+    font-family: "FS Lola Regular", Sans-serif;
+    font-weight: normal;
+    font-style: normal;
+}
+.more-filter-data *, .more-filter-data h6{
+    font-family: "FS Lola Regular", Sans-serif !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+}
+.property-tile h2 {
+    font-size: 25px !important;
+}
+.property-tiles-container-2 .content h5{
+    letter-spacing: 4.05px;
+    font-weight: 400;
+}
+.home-hero-slider .top-content h2{
+    letter-spacing: 4.96px;
+}
+.wpcf7-form input, .wpcf7-form textarea{
+    font-family: "FS Lola Regular", Sans-serif;
+    font-weight: normal;
+    font-style: normal;
+}
+.home-hero-slider .top-content h6{
+    font-family: "FS Lola Regular", Sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 21px;
+    line-height: 28px;
+
+}
+.home-hero-slider .bottom-section p{
+    font-family: "FS Lola Regular", Sans-serif;
+    font-weight: normal;
+    font-style: normal;
+
+}
+/* .slick-prev:before {
+    content: "<";
+    color: red;
+    font-size: 30px;
+  }
+  
+  .slick-next:before {
+    content: ">";
+    color: red;
+    font-size: 30px;
+  } */
+
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.property-tile img.a-left.control-c.prev.slick-prev.slick-arrow {
+    position: absolute;
+    top: 42%;
+    left: 7px;
+    z-index: 999;
+    width: 30px;
+    cursor: pointer;
+}
+
+.property-tile img.a-right.control-c.next.slick-next.slick-arrow {
+    position: absolute;
+    z-index: 999;
+    right: 7px;
+    top: 42%;
+    width: 30px;
+    cursor: pointer;
+}
+
+#loader-wrapper {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Customize the background color and opacity */
+    z-index: 9999;
+}
+
+#loader {
+    border: 16px solid #f3f3f3;
+    /* Customize the border color */
+    border-top: 16px solid #C2BB86;
+    /* Customize the spinner color */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.wishlist-icon {
+    position: absolute;
+    z-index: 999;
+    right: 18px;
+    top: 2%;
+}
+
+span.wishlist-count {
+    color: #000 !important;
+    font-size: 12px;
+    font-weight: 700;
+    position: absolute;
+    left: 20px;
+    z-index: 9999;
+    top: 4px;
+    width: 23px;
+    text-align: center;
+    font-family: "FS Lola Regular", Sans-serif;
+}
+
+.filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+    justify-content: flex-end;
+    gap: 15px;
+    align-items: center;
+}
+
+.more-filter-data h6 {
+    color: #C2BB86 !important;
+    font-size: 18px !important;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 25px !important;
+    letter-spacing: -0.18px;
+}
+
+/* 
+.news-section article {
+    border-left: 1px solid var(--e-global-color-primary);
+} */
+.news-event-section article .article-section{
+    border: 0 !important;
+}
+.news-section .elementor-post__text {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.news-section .elementor-post__meta-data {
+    order: -1;
+}
+
+.news-section .elementor-post__read-more {
+    margin-top: auto;
+}
+
+.news-section .elementor-post__read-more:after {
+    content: "\f054";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 600;
+    font-size: 16px;
+    margin-left: 1rem;
+    color: var(--e-global-color-primary);
+}
+
+.news-section article:hover .elementor-post__read-more:after {
+    color: var(--e-global-color-secondary);
+}
+.min-max-price {
+    display: flex;
+    align-content: stretch;
+    justify-content: flex-start;
+    gap: 17px;
+}
+.all-price {
+    width: 50%;
+}
+.amenities{
+    padding-top: 20px;
+}
+.main-condition {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+.amenities {
+    padding-top: 20px;
+    display: flex;
+    gap: 3px;
+}
+
+@media (max-width:767px){
+    .back-property{
+        top: 24% !important;
+        bottom: 0 !important;
+        left: 3% !important;
+    }
+    .sub-menu {
+        display: block !important;
+        height: 100%;
+        position: fixed;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        transform: translateX(100%);
+        transition: all 0.2s ease-in-out;
+    }
+    .show .sub-menu {
+        transform: translateX(00%);
+
+    }
+}
+
+.header-propertis a, .header-propertis a:hover{
+    color:#fff;
+}
+.accordion {
+    margin: 20px auto;
+  }
+  
+  .accordion-section {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 14px;
+    background-color: transparent;
+  }
+  
+  .accordion-header {
+    padding: 10px;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .accordion-content {
+    display: none;
+    padding: 10px;
+  }
+  
+  .toggle-icon {
+    font-weight: bold;
+  }
+  .download {
+    display: flex;
+    border-bottom: 1px solid #1d1d1b;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.download div {
+    width: 100%;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    text-align: right;
+    padding-right: 14px;
+    color: #1d1d1b;
+}
+.download div a{
+    color: #1d1d1b;
+}
+.download-image {
+    display: flex;
+    gap: 36px;
+    align-items: center;
+}
+.download-image p{
+    margin-bottom: 0px;
+}
+.lightbox , .lightbox-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(255 255 255 / 1);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    z-index: 999;
+    flex-direction: column;
+    overflow: scroll;
+    justify-content: center;
+}
+.lightbox{
+    padding:0px !important;
+}
+.back-property:before{
+	content:'';
+	position:absolute;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	top: 0;
+}
+@media(min-width:1200px){
+    .lightbox , .lightbox-video{
+        justify-content: center;
+    }
+}
+  .slider-popup-image {
+    width: 100%;
+    max-width: 800px;
+  }
+  
+  .close-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+  }
+  .property-tile1 .wishlist-icon {
+    position: absolute;
+    z-index: 999;
+    left: 24%;
+    top: 36%;
+    color: #fff;
+    cursor: pointer;
+}
+.saved-properties .property-tile .wishlist-icon{
+    position: relative;
+}
+.villages-list {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 80px;
+    column-gap: 49px;
+}
+#popmake-10766,
+#popmake-32688{
+    background-color: #003655;
+    border: 0;
+    padding: 70px;
+	border-radius: 92px;
+}
+
+.village-post {
+    flex: 0 0 30.72%; /* Set each village-post to take up one-third of the container width */
+    box-sizing: border-box;
+    padding: 10px; /* Optional: Add padding for better spacing */
+    position: relative;
+}
+
+/* Optional: Add styles to the village-post elements */
+.village-post img {
+    max-width: 100%;
+    height: auto;
+}
+
+.village-post h2 {
+    text-align: center;
+    margin-top: 10px;
+}
+body .villages-list h2{
+    text-align: center;
+    font-family: Optima;
+    font-size: 34px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 107%;
+    letter-spacing: 5.1px;
+    text-transform: uppercase;
+    color: #fff;
+    max-width: 360px;
+    width: 100%;
+    margin: 4px auto 14px auto;
+}
+.download-link img{
+    padding-left: 21px;
+    vertical-align: middle;
+}
+.download-link {
+    padding-top: 14px;
+}
+.inner-village-post{
+    text-align: center;
+    position: absolute;
+    bottom: 50px;
+    width: 100%;
+}
+.explore-link a{
+    width: 191px;
+    height: 48px;
+    line-height: 48px;
+    flex-shrink: 0;
+    border-radius: 40px;
+    background:  #FFF;
+    display: inline-block;
+    color: #003655;
+    text-align: center;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+}
+.download-link a{
+    color: #FFF;
+    text-align: center;
+    font-family: FS Lola;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 145%; /* 26.1px */
+}
+.village-title-container {
+    padding-top: 50px;
+}
+.amenities1 {
+    display: flex;
+    gap: 15px;
+    float: right;
+}
+.property-home .property-tile{
+    width: calc(50% - 20px);
+}
+img.play-icon {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 248px;
+    margin: 0 auto;
+}
+.video-section{
+    position: relative;
+}
+body h2.top-main-title {
+    color: #C2BB86;
+    font-family: Bacalisties;
+    font-size: 54.08px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+}
+.range_ford_details {
+    display: flex;
+    gap: 44px;
+    text-align: center;
+}
+.amenities1 label{
+    line-height: normal;
+    border: 1px solid #C2BB86;
+    color: #1D1D1B;
+    padding: 5px 10px;
+    border-radius: 30px;
+    margin: 5px;
+    background-color: #fff;
+}
+.amenities1 input {
+    height: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+.amenities1 label.checked-label {
+    background-color: #C2BB86;
+}
+.amenities1:before {
+    content: '';
+    padding-left: 620px;
+    background-color: #c2bb86;
+    height: 1px;
+    margin: auto;
+}
+#map .e-con-inner {
+    margin: 0;
+}
+.custom-slider-park .slider-item img{
+   
+    border-radius: 40px;
+    width: 560px;
+    height: auto;
+    
+}
+.custom-slider-park img.a-right.control-c.next.slick-next.slick-arrow {
+    position: absolute;
+    right: 3%;
+    top: 38%;
+    z-index: 999;
+}
+.custom-slider-park img.a-left.control-c.prev.slick-prev.slick-arrow {
+    position: absolute;
+    left: 3%;
+    z-index: 999;
+    top: 38%;
+}
+.custom-slider-park  .slick-slide {
+    margin: 0 30px;
+}
+.information-slider .custom-slider-park .slider-item-text{
+    color: #FFF;
+    font-family: "Optima", Sans-serif;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28.6px;
+    text-transform: uppercase;
+    letter-spacing: 2.6px;
+}
+.information-slider .custom-slider-park .slider-item-read-more{
+    color: var(--white, #FFF);
+    font-family: "FS Lola Light", Sans-serif;
+    font-size: 21px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 29.4px;
+}
+.information-slider .slider-item-park {
+    position: relative;
+}
+.information-slider .slider-text-read {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.text-transform h2.elementor-heading-title{
+    text-transform: none !important;
+}
+.faq-section .e-n-accordion-item-title{
+    background-color: #fff;
+}
+.faq-section .e-n-accordion .e-n-accordion-item{
+    border: 1px solid #C2BB86;
+    border-radius: 40px;
+    overflow: hidden;
+}
+.faq-section .e-n-accordion .e-n-accordion-item-title-text{
+    color:#003655;
+}
+.faq-section .e-n-accordion .e-n-accordion-item-title .e-closed , .faq-section .e-n-accordion .e-n-accordion-item-title .e-opened{
+    align-items: center;
+}
+.news-event-section .elementor-loop-container .e-loop-item .e-con-boxed{
+     border:0px;
+}
+.news-event-section .page-numbers {
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid var(--e-global-color-primary);
+    height: 50px;
+    width: 50px;
+    font-family: "Optima", Sans-serif;
+    font-size: 20px;
+    text-decoration: none;
+    background-color: #fff;
+    margin: 0 5px;
+    color: var(--e-global-color-secondary);
+    display: inline-block;
+}
+.text-shadow a.elementor-button{
+    text-shadow: none;
+}
+.news-event-section .page-numbers.current {
+    background-color: var(--e-global-color-primary);
+}
+.image-caption .wp-caption{
+    position: relative;
+}
+.image-caption .wp-caption .widget-image-caption{
+    background: #FEFAF1;
+    position: absolute;
+    bottom: 18px;
+    left: 22px;
+    padding: 10px;
+}
+/* .faq-section .e-n-accordion-item-title[aria-expanded="true"]{
+    padding-top:28px;
+} */
+.update-date{
+color:#003655;
+font-family: "FS Lola Regular", Sans-serif !important;
+font-weight: normal;
+font-style: normal;
+font-size: 22px;
+font-style: normal;
+font-weight: 400;
+line-height: 30.8px;
+letter-spacing: -0.22px;
+}
+.upcoming-date{
+    color: #C2BB86;
+    font-family: "FS Lola Regular", Sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 135%; /* 24.3px */
+}
+.article-section:hover .upcoming-date{
+    color: #fff;
+}
+.inner-village-list .elementor-button-icon svg{
+    width: 17px;
+    height: 17px;
+    fill:transparent !important;
+}
+.back-property{
+    font-family: 'FS Lola' !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 27px;
+    text-decoration-line: underline;
+    color: #003655;
+    cursor: pointer;
+    max-width: 800px;
+    flex: 0 0 auto;
+    width: 100%;
+    margin-bottom: 3rem;
+}
+.lightbox .slider-popup-image{
+    flex: 0 0 auto;
+    width: 100%;
+}
+.main-top-sec .first-image, .main-top-sec .second-image{
+    cursor: pointer;
+}
+.back-property img{
+    padding-right: 20px;
+}
+/* .properties-content .slick-slide div {
+    position: relative;
+    width: 100% !important;
+    padding-top: 56.25%; 
+    overflow: hidden;
+}
+.properties-content .slick-slide img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: auto;
+} */
+.lightbox .slick-list .slick-slide div{
+    position: relative;
+    width: 100%; /* This can be any width */
+    padding-top: 56.25%; /* 9/16 = 0.5625 */
+    overflow: hidden;
+}
+.lightbox .slick-list .slick-slide div img, .lightbox .slick-list .slick-slide div video{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: auto;
+}
+.properties-content .lightbox .slick-arrow{
+    width: 55px;
+    height: 55px;
+}
+.gallery-images .elementor-image-gallery img{
+    width:100%;
+    height: 429px;  
+    object-fit: cover;
+}
+.single-villages .comment-respond{
+    display: none;
+}  
+.single-galleries .properties-content{
+    padding: 0px;
+    border: 0px;
+}
+.gallery-listing{
+    padding-top:125px;
+}
+/* .slider-child-image .slick-list .slick-slide div{
+    padding-top: 0px;
+} */
+.pagination1{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+}
+.pagination1 .page-numbers {
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid var(--e-global-color-primary);
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    width: 50px;
+    font-family: "Optima", Sans-serif;
+    font-size: 20px;
+    text-decoration: none;
+    background-color: #fff;
+    margin: 0 5px;
+    color: var(--e-global-color-secondary);
+}
+.pagination1 .next.page-numbers:after {
+    content: "\f054";
+}
+.pagination1 .next.page-numbers:after, .pagination1 .prev.page-numbers:after {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 800;
+    font-size: 13px;
+}
+.pagination1 .page-numbers.prev:after {
+    content: "\f053";
+}
+.pagination1 .page-numbers.current {
+    background-color: #c2bb86;
+}
+/* village page */
+.elementor-element.post-content.view-village {
+    padding-bottom: 60px;
+}
+.elementor-element.post-content.view-village .inner-village-list {
+    position: absolute;
+    bottom: -61px;
+    left: 0;
+    right: 0;
+}
+.e-loop-item-651 .our-vilage-box .view-village h2.elementor-heading-title {
+    max-width: 55%;
+}
+.our-vilage-box .view-village h2.elementor-heading-title{
+	max-width:100%;
+}
+.single-galleries .gallery-item iframe {
+    width: 100%;
+    border-radius: 40px;
+    height: 100%;
+	background-color: #003655;
+}
+.single-post-tag .elementor-post-info__terms-list{
+	display:flex !important;
+	flex-wrap:wrap;
+}
+.single-post-tag ul li span.elementor-post-info__terms-list-item{
+    font-family: "FS Lola Regular", Sans-serif;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 25px;
+    padding: 8px 10px 8px 10px;
+    background-color: #fff;
+    border-style: solid;
+    border-width: 1px 1px 1px 1px;
+    border-color: #c2bb86;
+    border-radius: 30px;
+    margin-right: 18px;
+	margin-bottom:15px;
+}
+@media only screen and (max-width:1200px){
+    #map .e-con-inner {
+        margin: 0 auto;
+    }
+}
+@media only screen and (min-width: 1024px){
+	.pum-container.pum-responsive.pum-responsive-medium {
+		margin-left: -25% !important;
+		width: 50% !important;
+	}
+}
+@media only screen and (max-width: 1024px) {
+    .svg-map svg{
+        width: 100%;
+    }
+    .gallery-images .elementor-image-gallery .gallery{
+        margin:0px !important;
+    }
+    .gallery-images .gallery-item{
+        padding: 0px 10px 20px 10px !important;
+    }
+    .gallery-images .elementor-image-gallery img{
+        width: 100%;
+        height: auto;
+    }
+}
+@media only screen and (max-width: 768px) {
+    
+    .village-post{
+        flex: 0 0 49.33%;
+    }
+}
+@media only screen and (max-width: 767px) {
+    .gallery-images .elementor-image-gallery .gallery{
+        margin:0px !important;
+    }
+    .gallery-images .gallery-item{
+        padding: 0 0 20px 0 !important;
+    }
+    .gallery-images .elementor-image-gallery img{
+        width: 100%;
+        height: auto;
+    }
+    .sorting{
+        width: 50%;
+    }
+    .sorting #price_sorting{
+        width: 100%;
+    }
+    .more-filter.elementor-button.elementor-button-link.elementor-size-sm {
+        width: 46%;
+    }
+    .villages-list {
+        flex-direction: column;
+    }
+    .jump-list ul{
+        flex-direction: column;
+        gap: 12px;
+    }
+    .custom-slider-park .slick-arrow{
+        width:30px;
+    }
+#popmake-10766,
+#popmake-32688 {
+    padding: 30px 30px;
+    border-radius: 45px;
+}
+}
+a.book-appointment{
+    color: #1D1D1B;
+}
+a.book-appointment:hover{
+    color: #C2BB86 !important;
+}
+.popmake .popmake-content .wpcf7-response-output {
+    color: #fff;
+    font-family: "FS Lola Regular", Sans-serif;
+    padding: 10px;
+}
+.brochure-form select{
+    webkit-appearance: auto !important;
+    -moz-appearance: auto !important;
+    appearance: auto !important;
+}
+
+
+/* Thank You Page Start */
+.post-block-set .elementor-post__text {
+    display: flex !important;
+    flex-wrap: wrap;
+}
+.post-block-set .elementor-post__text .elementor-post__title {
+    order: 2;
+}
+.post-block-set .elementor-post__text .elementor-post__meta-data {
+    order: 1;
+}
+.post-block-set .elementor-post__text a.elementor-post__read-more {
+    order: 3;
+	position: relative;
+}
+.post-block-set .elementor-post__text a.elementor-post__read-more:before {
+    content: "";
+    position: absolute;
+    width: 9px;
+    height: 14px;
+    background: url(/wp-content/uploads/2024/06/right-arrow-icon.svg);
+    top: 50%;
+    transform: translateY(-50%);
+    right: -35px;
+    margin-top: -2px;
+}
+.post-block-set article.elementor-post:hover {
+    border-bottom-right-radius: 40px;
+}
+.post-block-set article.elementor-post:hover .elementor-post__text .elementor-post__meta-data {
+	color: var(--e-global-color-secondary);
+}
+.post-block-set article.elementor-post:hover .elementor-post__text .elementor-post__read-more {
+	color: var(--e-global-color-secondary);
+}
+.post-block-set article.elementor-post:hover .elementor-post__text .elementor-post__title a {
+    color: var(--e-global-color-secondary);
+}
+.post-block-set article.elementor-post:hover .elementor-post__text a.elementor-post__read-more:before {
+    background: url(/wp-content/uploads/2024/06/right-arrow-icon-blue.svg);
+}
+/* Thank You Page End */
+
+.sherpa-form label{
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+body{
+	padding-top:112px;
+}
+
+@media(min-width:1025px){
+	body{
+		padding-top:130px;
+	}
+}
+.elementor-location-header{
+	position:fixed;
+	top:0;
+	width:100%;
+	left:0;
+	z-index:999999;
+}
+
+.back-btn .elementor-button {
+	fill: var(--e-global-color-secondary) !important;
+    color: var(--e-global-color-secondary) !important;
+    background-color: #FFFFFF00 !important;
+    border-radius: 0px 0px 0px 0px !important;
+    padding: 0px 0px 0px 0px !important;
+}
+.back-btn .elementor-button-text{
+	padding-left:15px;
+}
+
+.main-hero-images-set .all-main-btn-set .property-amenities ul li, .properties-filter-row .main-condition .amenities label{
+    text-transform: capitalize;
+}
+.brochure-download{
+    background-color: #fff !important;
+    color: #003655 !important;
+}
+.brochure-download:hover{
+	background-color: #c2bb86 !important;
+}
+.say-hello .elementor-icon-list-icon{
+	background-color: var(--e-global-color-primary) !important;
+}
+@media(max-width:767px){
+	.our-vilage-box .brochure-button{
+		min-height:30px !important;
+	}
+}
+.click-popup-button{
+    margin-bottom: 25px !important;
+}
+#brochure-link-container {
+    display: block;
+}
+#mega-menu-wrap-menu-1 #mega-menu-menu-1>li.mega-menu-tabbed>ul.mega-sub-menu>li.mega-menu-item>ul.mega-sub-menu {
+  top: 0 !important;
+  padding: 0px 0px 0px 0px !important;
+}

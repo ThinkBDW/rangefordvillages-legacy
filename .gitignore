@@ -1,0 +1,24 @@
+# Rangeford Villages — track only our own code.
+# Everything else (WordPress core, public plugins, uploads) is managed by the
+# host or reinstalled at a pinned version. See audit/data/plugins.csv.
+
+# Ignore everything at the root of wp-content...
+/*
+
+# ...then re-admit only what we own.
+!.gitignore
+!README.md
+
+!themes/
+themes/*
+!themes/hello-elementor-child/
+
+!plugins/
+plugins/*
+!plugins/budget-calculator/
+
+# Never track these, wherever they appear.
+**/.DS_Store
+**/node_modules/
+**/*.log
+**/_url.log
