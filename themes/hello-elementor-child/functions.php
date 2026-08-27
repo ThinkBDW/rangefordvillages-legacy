@@ -27,6 +27,7 @@ $rv_includes = array(
 	// rv_get_village_by_title() from here. Safe to hoist -- this file only
 	// defines functions and has no load-time side effects.
 	'helpers',
+	'media',
 	'enqueue',
 	'post-types',
 	'ajax/properties',
