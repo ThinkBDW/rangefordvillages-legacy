@@ -51,7 +51,6 @@ function whishlist_count_number()
         <span style="color:#fff;" class="wishlist-count">
             <?php echo isset($_SESSION['wishlist']) ? count($_SESSION['wishlist']) : 0; ?>
         </span>
-        <!-- <img src="https://rangefordvillages-co-uk.stackstaging.com/wp-content/uploads/2023/12/Vector-1.png" alt="Wishlist"> -->
     </div>
 <?php }
 

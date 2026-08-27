@@ -598,18 +598,6 @@ while (have_posts()):
                                 ?>
                             </div>
 
-                            <!-- <div class="saved-properties">
-                                <div class="property-tile">
-                                    <div class="wishlist-icon-section" data-property-id="<?php //echo get_the_ID(); ?>">
-                                        <img class="without-fill"
-                                            src="https://rangefordvillages-co-uk.stackstaging.com/wp-content/uploads/2024/01/Vector-4.png"
-                                            alt="Wishlist">
-                                        <img style="display:none;" class="fill-whish-list"
-                                            src="https://rangefordvillages-co-uk.stackstaging.com/wp-content/uploads/2023/12/Vector-1.png"
-                                            alt="Wishlist"> Save property
-                                    </div>
-                                </div>
-                            </div> -->
                         </div>
                     </div>
                 </div>

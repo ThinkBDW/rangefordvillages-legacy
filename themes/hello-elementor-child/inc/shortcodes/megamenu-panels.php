@@ -25,7 +25,7 @@ add_shortcode('mm_homewood_grove', function() {
             <h3>Homewood<br>Grove</h3>
             <div class="button-row">
                 <a class="elementor-button elementor-button-link elementor-size-sm" href="/villages/homewood-grove/"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Explore village </span></span></a>
-                <a href="#" data-term-redirechomewood="https://rangefordvillages.co.uk/contact-us?village=Homewood+Grove&type=request-brochure" data-term-url="https://online.flipbuilder.com/Rangeford_Villages/extr/" data-term-id="643" target="_blank" class="download-bro single-brochure-view-button elementor-button elementor-button-link elementor-size-sm homewood"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Download the brochure</span></span></a>
+                <a href="#" data-term-redirechomewood="' . home_url() . '/contact-us?village=Homewood+Grove&type=request-brochure" data-term-url="https://online.flipbuilder.com/Rangeford_Villages/extr/" data-term-id="643" target="_blank" class="download-bro single-brochure-view-button elementor-button elementor-button-link elementor-size-sm homewood"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Download the brochure</span></span></a>
             </div>
         ';
 
@@ -47,7 +47,7 @@ add_shortcode('mm_mickle_hill', function() {
             <h3>Mickle<br>Hill</h3>
             <div class="button-row">
                 <a class="elementor-button elementor-button-link elementor-size-sm" href="/villages/mickle-hill/"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Explore village </span></span></a>
-                <a href="#" data-term-redirectmickle="https://rangefordvillages.co.uk/contact-us?village=Mickle+Hill&type=request-brochure" data-term-url="https://online.flipbuilder.com/Rangeford_Villages/sgzx/" target="_blank" data-term-id="651" class="download-bro single-brochure-view-button elementor-button elementor-button-link elementor-size-sm micklehill"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Download the brochure</span></span></a>
+                <a href="#" data-term-redirectmickle="' . home_url() . '/contact-us?village=Mickle+Hill&type=request-brochure" data-term-url="https://online.flipbuilder.com/Rangeford_Villages/sgzx/" target="_blank" data-term-id="651" class="download-bro single-brochure-view-button elementor-button elementor-button-link elementor-size-sm micklehill"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Download the brochure</span></span></a>
             </div>
         ';
 
@@ -68,8 +68,8 @@ add_shortcode('mm_siddington_park', function() {
             </div>
             <h3>Siddington <br>Park</h3>
             <div class="button-row">
-                <a class="elementor-button elementor-button-link elementor-size-sm" href="https://rangefordvillages.co.uk/villages/siddington-park/"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Explore village</span></span></a>
-                <a href="#" data-term-redirectsiddin="https://rangefordvillages.co.uk/contact-us?village=Siddington+Park&type=request-brochure" data-term-url="https://online.flipbuilder.com/Rangeford_Villages/rsyg/" target="_blank" data-term-id="645" class="download-bro single-brochure-view-button elementor-button elementor-button-link elementor-size-sm siddingtonpark"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Download the brochure</span></span></a>
+                <a class="elementor-button elementor-button-link elementor-size-sm" href="' . home_url() . '/villages/siddington-park/"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Explore village</span></span></a>
+                <a href="#" data-term-redirectsiddin="' . home_url() . '/contact-us?village=Siddington+Park&type=request-brochure" data-term-url="https://online.flipbuilder.com/Rangeford_Villages/rsyg/" target="_blank" data-term-id="645" class="download-bro single-brochure-view-button elementor-button elementor-button-link elementor-size-sm siddingtonpark"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Download the brochure</span></span></a>
             </div>
         ';
 
@@ -91,7 +91,7 @@ add_shortcode('mm_strawberry_fields', function() {
             <h3>Strawberry<br>fields</h3>
             <div class="button-row">
                 <a class="elementor-button elementor-button-link elementor-size-sm" href="/villages/strawberry-fields/"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Explore village </span></span></a>
-                <a href="#" data-term-strawberry ="https://rangefordvillages.co.uk/contact-us?village=Strawberry+Fields&type=request-brochure" data-term-url="https://online.flipbuilder.com/Rangeford_Villages/ruwq/" target="_blank" data-term-id="647" class="download-bro single-brochure-view-button elementor-button elementor-button-link elementor-size-sm strawberryfields"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Download the brochure</span></span></a>
+                <a href="#" data-term-strawberry="' . home_url() . '/contact-us?village=Strawberry+Fields&type=request-brochure" data-term-url="https://online.flipbuilder.com/Rangeford_Villages/ruwq/" target="_blank" data-term-id="647" class="download-bro single-brochure-view-button elementor-button elementor-button-link elementor-size-sm strawberryfields"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Download the brochure</span></span></a>
             </div>
         ';
 
@@ -113,7 +113,7 @@ add_shortcode('mm_wadswick_green', function() {
             <h3>Wadswick <br>green</h3>
             <div class="button-row">
                 <a class="elementor-button elementor-button-link elementor-size-sm" href="/villages/wadswick-green/"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Explore village</span></span></a>
-                <a href="#" data-term-id="649" data-term-redirectgreen="https://rangefordvillages.co.uk/contact-us?village=Wadswick+Green&type=request-brochure" data-term-url="https://online.flipbuilder.com/Rangeford_Villages/dhfy/" target="_blank" class="download-bro single-brochure-view-button elementor-button elementor-button-link elementor-size-sm wadswickgreen"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Download the brochure</span></span></a>
+                <a href="#" data-term-id="649" data-term-redirectgreen="' . home_url() . '/contact-us?village=Wadswick+Green&type=request-brochure" data-term-url="https://online.flipbuilder.com/Rangeford_Villages/dhfy/" target="_blank" class="download-bro single-brochure-view-button elementor-button elementor-button-link elementor-size-sm wadswickgreen"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Download the brochure</span></span></a>
             </div>
         ';
 
@@ -130,7 +130,7 @@ add_shortcode('mm_future_villages', function() {
         return '
             <h3>Future<br>Villages</h3>
             <div class="button-row">
-                <a class="elementor-button elementor-button-link elementor-size-sm" href="https://rangefordvillages.co.uk/villages/elstree-hertfordshire/"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Explore village </span></span></a>
+                <a class="elementor-button elementor-button-link elementor-size-sm" href="' . home_url() . '/villages/elstree-hertfordshire/"><span class="elementor-button-content-wrapper"><span class="elementor-button-text">Explore village </span></span></a>
             </div>
         ';
 
