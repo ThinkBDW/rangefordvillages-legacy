@@ -13,19 +13,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // --- functions.php lines 1759-1785: type dash->space (form_tag filter is BROKEN, see cleanup commit) ---
-// Define the function to replace dashes with spaces
-function customize_book_appointment_value($value, $tag)
-{
-    // Only run on the 'type' field
-    if ('type' === $tag->name) {
-        // Replace dashes with spaces
-        $value = str_replace('-', ' ', $value);
-    }
-    return $value;
-}
-
-// Add a filter to modify the 'type' value when Contact Form 7 collects it
-add_filter('wpcf7_form_tag', 'customize_book_appointment_value', 10, 2);
+// Removed: customize_book_appointment_value() on wpcf7_form_tag.
+//
+// Its signature was ( $value, $tag ), but the wpcf7_form_tag filter passes
+// ( $tag, $replace ) -- so $tag received a boolean and $tag->name raised
+// "Attempt to read property on bool" for every form tag on every page load
+// (9,467 occurrences in the inherited debug.log). The dash->space
+// substitution it was meant to perform never ran.
+//
+// It was also redundant: cf7_change_booking_type_format() below does the same
+// substitution on wpcf7_posted_data, which is what reaches the CRM and the
+// notification email. 'type' is a hidden field, so no displayed value relied
+// on the broken filter.
 
 // Define the function to replace dashes with spaces in posted data
 function cf7_change_booking_type_format($posted_data)
@@ -95,7 +94,11 @@ function dynamic_village_field_values($tag, $unused) {
         'exclude'     => [20184],
     );
 
-    if ($qo && $qo->post_name === 'coming-soon') {
+    // get_queried_object() returns WP_Post_Type on post-type archives, WP_Term
+    // on taxonomy archives and WP_User on author archives -- none of which have
+    // post_name. Guarding on WP_Post silences the warning this raised on every
+    // archive request.
+    if ($qo instanceof WP_Post && $qo->post_name === 'coming-soon') {
         $args['meta_query'] = array(
             array(
                 'key'     => 'future_village',

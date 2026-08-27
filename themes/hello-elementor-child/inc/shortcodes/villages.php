@@ -105,9 +105,11 @@ function vilages_thank_link()
 
     if (isset($_GET['village'])) {
         $ref_post_title = sanitize_text_field($_GET['village']);
-        // Get the post object by the title, specifying the correct custom post type ('villages' in this case)
-        $ref_post = get_page_by_title($ref_post_title, OBJECT, 'villages');
-        $post_id_village = $ref_post->ID;
+        // Look up the village by title. Previously get_page_by_title() (deprecated
+        // in WP 6.2) with an unguarded ->ID, so any ?village= value that did not
+        // match a village title was a fatal on PHP 8.
+        $ref_post = rv_get_village_by_title($ref_post_title);
+        $post_id_village = $ref_post ? $ref_post->ID : 0;
 
         ?>
         <input type="hidden" name="referred_post_id" value="<?php echo $post_id_village; ?>">

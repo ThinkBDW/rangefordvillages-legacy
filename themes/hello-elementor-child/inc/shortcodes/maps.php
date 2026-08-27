@@ -13,76 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // --- functions.php lines 3549-3764: [custom_google_map] (+ dead plural dupe), [property_main_location_url] ---
-function custom_google_map_repeater_shortcodes($atts) {
-    // Parse shortcode attributes
-    $atts = shortcode_atts(array(
-        'page_id' => get_the_ID(), // Default to the current page ID
-    ), $atts);
-
-    $page_id = $atts['page_id'];
-
-    // Get the repeater field data
-    $locations = get_field('location_info', $page_id); // Replace with your ACF repeater field name
-
-    if (!$locations) {
-        return;
-    }
-
-    // Prepare map data as JSON
-    $map_data = array();
-    $categories = array(); // To store unique categories
-    $main_location = null; // Variable to store main location
-
-    foreach ($locations as $index => $location) {
-        // Store the first location as the main location
-        if (!empty($location['loc_latitude']) && !empty($location['loc_longitude']) && !empty($location['loc_label'])) {
-            if ($index === 0 && $main_location === null) {
-                $main_location = array(
-                    'lat' => floatval($location['loc_latitude']),
-                    'lng' => floatval($location['loc_longitude']),
-                    'category' => sanitize_text_field($location['loc_category']),
-                    'label' => sanitize_text_field($location['loc_label'])
-                );
-            }
-
-            $map_data[] = array(
-                'lat' => floatval($location['loc_latitude']),
-                'lng' => floatval($location['loc_longitude']),
-                'category' => sanitize_text_field($location['loc_category']),
-                'label' => sanitize_text_field($location['loc_label'])
-            );
-
-            // Collect unique categories
-            $categories[] = sanitize_text_field($location['loc_category']);
-        }
-    }
-
-    // Remove duplicate categories
-    $unique_categories = array_unique($categories);
-
-    // Encode data for JavaScript
-    $map_data_json = wp_json_encode($map_data);
-    $main_location_json = wp_json_encode($main_location);
-
-    // Generate filter buttons with "All" button at the beginning
-    $filter_buttons = '<div class="map-block e-con e-flex"><div class="e-con-inner"><div class="custom-map-block"><div class="map-filters-block"><div id="map-filters">';
-    $filter_buttons .= '<button class="filter-button" data-category="all">All</button>'; // All button
-    foreach ($unique_categories as $category) {
-        if($category != "Select Category"){
-            $filter_buttons .= '<button class="filter-button" data-category="' . esc_attr($category) . '">' . esc_html($category) . '</button>';
-        }
-    }
-    $filter_buttons .= '</div></div>';
-
-    return $filter_buttons . '<div class="custom-map-wrap"><div id="custom-google-map" style="width: 100%; height: 500px;"></div>
-    
-    </div></div></div></div>
-    
-    <script>
-        var mapData = ' . $map_data_json . ';
-        var mainLocation = ' . $main_location_json . ';
-    </script>';
-}
+// Removed: custom_google_map_repeater_shortcodes() -- a ~70-line copy of the
+// function below, differing only by the trailing 's' in its name. It was never
+// called and never registered as a shortcode.
 add_shortcode('custom_google_map', 'custom_google_map_repeater_shortcode');
 
 function custom_google_map_repeater_shortcode($atts) {

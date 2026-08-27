@@ -1,6 +1,20 @@
 <div class="rangeford-village-map">
     <div class="rangeford-village-map__map-image">
-        <?= file_get_contents(get_field('village_map_image', 'option')['url']) ?>
+        <?php
+        // Inline the map SVG so its paths can be styled and hit-tested.
+        //
+        // This previously read the attachment's *URL* with file_get_contents(),
+        // which issued a blocking HTTP request from the server back to itself on
+        // every render -- slow under load, and it failed outright behind a
+        // self-signed certificate. Reading the file from disk avoids the round
+        // trip entirely.
+        $rv_map       = get_field('village_map_image', 'option');
+        $rv_map_path  = ( is_array($rv_map) && ! empty($rv_map['ID']) ) ? get_attached_file($rv_map['ID']) : '';
+
+        if ( $rv_map_path && is_readable($rv_map_path) ) {
+            echo file_get_contents($rv_map_path); // phpcs:ignore -- trusted media-library SVG, inlined deliberately.
+        }
+        ?>
     </div>
     <div class="rangeford-village-map__markers">
         <?php foreach($markers as $marker): ?>

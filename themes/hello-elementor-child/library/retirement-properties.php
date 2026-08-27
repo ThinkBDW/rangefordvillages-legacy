@@ -34,7 +34,8 @@ function rangeford_get_property_fees_note($location = '')
     $url = '';
     $target = '';
 
-    $village_post = get_page_by_title($location, OBJECT, 'villages');
+    // get_page_by_title() was deprecated in WP 6.2.
+    $village_post = rv_get_village_by_title($location);
     if ($village_post) {
         $village_label = get_field('village_property_fees_label', $village_post->ID);
         if ($village_label) {

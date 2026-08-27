@@ -22,10 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Functionality for filtering retirement properties (was functions.php:7).
-require_once get_stylesheet_directory() . '/library/retirement-properties.php';
-
 $rv_includes = array(
+	// Loaded first: library/retirement-properties.php below calls
+	// rv_get_village_by_title() from here. Safe to hoist -- this file only
+	// defines functions and has no load-time side effects.
+	'helpers',
 	'enqueue',
 	'post-types',
 	'ajax/properties',
@@ -55,10 +56,14 @@ foreach ( $rv_includes as $rv_include ) {
 	require_once get_stylesheet_directory() . '/inc/' . $rv_include . '.php';
 }
 
+// Functionality for filtering retirement properties (was functions.php:7).
+// Now loaded after inc/helpers.php, whose rv_get_village_by_title() it calls.
+require_once get_stylesheet_directory() . '/library/retirement-properties.php';
+
 // Village map shortcode (was functions.php:4057, i.e. after events.php).
 require_once get_stylesheet_directory() . '/library/shortcode-village-map.php';
 
-foreach ( array( 'ajax/villages', 'helpers', 'shortcodes/megamenu-panels' ) as $rv_include ) {
+foreach ( array( 'ajax/villages', 'shortcodes/megamenu-panels' ) as $rv_include ) {
 	require_once get_stylesheet_directory() . '/inc/' . $rv_include . '.php';
 }
 
