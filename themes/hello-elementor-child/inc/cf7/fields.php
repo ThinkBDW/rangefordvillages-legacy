@@ -1,0 +1,172 @@
+<?php
+/**
+ * Contact Form 7: dynamic field values
+ *
+ * Moved verbatim from functions.php during the takeover refactor
+ * (was lines 1759-1785, 2135-2235, 3408-3432). No behaviour change in the move commit.
+ *
+ * @package hello-elementor-child
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+// --- functions.php lines 1759-1785: type dash->space (form_tag filter is BROKEN, see cleanup commit) ---
+// Define the function to replace dashes with spaces
+function customize_book_appointment_value($value, $tag)
+{
+    // Only run on the 'type' field
+    if ('type' === $tag->name) {
+        // Replace dashes with spaces
+        $value = str_replace('-', ' ', $value);
+    }
+    return $value;
+}
+
+// Add a filter to modify the 'type' value when Contact Form 7 collects it
+add_filter('wpcf7_form_tag', 'customize_book_appointment_value', 10, 2);
+
+// Define the function to replace dashes with spaces in posted data
+function cf7_change_booking_type_format($posted_data)
+{
+    if (isset($posted_data['type'])) {
+        // Replace the dash with a space in the 'type' form field
+        $posted_data['type'] = str_replace('-', ' ', $posted_data['type']);
+    }
+    return $posted_data;
+}
+
+// Add a filter to modify the posted data before Contact Form 7 uses it
+add_filter('wpcf7_posted_data', 'cf7_change_booking_type_format');
+
+
+// --- functions.php lines 2135-2235: dead dynamic_field_values + dynamic_village_field_values ---
+/*function dynamic_field_values($tag, $unused)
+{
+
+    if ($tag['name'] != 'your-field-name')
+        return $tag;
+
+    $args = array(
+        'numberposts'   => -1,
+        'post_type'     => 'villages',
+        'orderby'       => 'title',
+        'order'         => 'ASC',
+    );
+
+    $custom_posts = get_posts($args);
+
+    if (!$custom_posts)
+        return $tag;
+    // Insert a blank item as the first option
+    array_unshift($tag['values'], '');
+    array_unshift($tag['labels'], 'Village interested in');
+
+    foreach ($custom_posts as $custom_post) {
+
+        $tag['raw_values'][] = $custom_post->post_title;
+        $tag['values'][] = $custom_post->post_title;
+        $tag['labels'][] = $custom_post->post_title;
+    }
+
+    return $tag;
+}
+
+add_filter('wpcf7_form_tag', 'dynamic_field_values', 10, 2);*/
+function dynamic_village_field_values($tag, $unused) {
+    $qo = get_queried_object();
+
+    // Only target the specific dropdown
+    if ($tag['name'] !== 'your-field-name') {
+        return $tag;
+    }
+
+    // Reset the options so we don’t duplicate
+    $tag['values'] = [];
+    $tag['labels'] = [];
+
+    // Get village posts
+    $args = array(
+        'numberposts' => -1,
+        'post_type'   => 'villages',
+        'orderby'     => 'title',
+        'order'       => 'ASC',
+        'exclude'     => [20184],
+    );
+
+    if ($qo && $qo->post_name === 'coming-soon') {
+        $args['meta_query'] = array(
+            array(
+                'key'     => 'future_village',
+                'value'   => '1',
+                'compare' => '=',
+            ),
+        );
+
+        $args['orderby'] = 'menu_order';
+        $args['order']   = 'ASC';
+    }
+
+    $custom_posts = get_posts($args);
+    $mapping      = [];
+
+    if (!$custom_posts) {
+        return $tag; // no villages
+    }
+
+    // Insert default/placeholder option
+    $tag['values'][] = '';
+    $tag['labels'][] = 'Village interested in';
+
+    foreach ($custom_posts as $custom_post) {
+        $village_name = $custom_post->post_title;
+        $village_email = get_field('contact_form_email', $custom_post->ID);
+
+        if (!empty($village_email)) {
+            // support multiple comma-separated addresses
+            $emails       = array_map('trim', explode(',', $village_email));
+            $email_string = implode(',', $emails);
+
+            // Add option to dropdown
+            $tag['values'][] = $village_name;
+            $tag['labels'][] = $village_name;
+
+            // Store mapping for email routing
+            $mapping[$village_name] = $email_string;
+        }
+    }
+
+    set_transient('village_email_mapping', $mapping, 12 * HOUR_IN_SECONDS);
+
+    return $tag;
+}
+add_filter('wpcf7_form_tag', 'dynamic_village_field_values', 10, 2);
+
+
+// --- functions.php lines 3408-3432: add_referral_datetime + add_hidden_page_id_script ---
+add_filter('wpcf7_posted_data', 'add_referral_datetime');
+
+function add_referral_datetime($posted_data) {
+
+    // Always set the current date and time in the hidden field
+    $posted_data['current-date'] = current_time('Y-m-d H:i:s'); // Change format as needed
+    return $posted_data;
+}
+
+function add_hidden_page_id_script() {
+    ?>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            var pageId = <?php echo get_the_ID(); ?>;
+            var hiddenField = document.querySelector('input[name="page-id"]');
+            if (hiddenField) {
+                hiddenField.value = pageId;
+            }
+        });
+    </script>
+    <?php
+}
+add_action('wp_footer', 'add_hidden_page_id_script');
+
+
