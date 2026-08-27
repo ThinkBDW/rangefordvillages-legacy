@@ -49,6 +49,12 @@ $rv_includes = array(
 	'shortcodes/budget-calculator',
 	'integrations/sherpa/legacy-source-fields',
 	'integrations/sherpa/legacy-routing',
+	// The new code-based integration. Runs ALONGSIDE the legacy routing and
+	// the contact-form-to-any-api plugin during the parallel run: it captures
+	// and stores every lead and records the request it would send, but posts
+	// nothing while RV_SHERPA_DRY_RUN is true. legacy-routing.php and the
+	// plugin are removed together at cutover.
+	'integrations/sherpa/bootstrap',
 	'shortcodes/maps',
 	'events',
 );
