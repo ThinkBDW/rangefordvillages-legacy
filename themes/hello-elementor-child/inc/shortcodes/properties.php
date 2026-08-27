@@ -57,22 +57,6 @@ function home_page_properties($atts)
         'posts_per_page' => intval($atts['posts_per_page']),
         'post_status' => 'publish',
         'offset' => intval($atts['offset']),
-        /*'meta_query' => array(
-                'relation' => 'AND',
-                array(
-                    'key' => 'bed',
-                    'type' => 'NUMERIC',
-                ),
-                array(
-                    'key' => 'price',
-                    'type' => 'NUMERIC',
-                ),
-            ),
-            'orderby' => array(
-                'bed' => 'DESC',
-                'price' => 'ASC',
-                'title' => 'ASC',
-            ),*/
 
     );
 
@@ -270,23 +254,7 @@ function vilages_page_properties($atts)
         $args['post__in'] = $property_ids;
     }
 
-    // $args = array(
-    //     'post_type'      => 'properties',
-    //     'posts_per_page' => intval($atts['posts_per_page']),
-    //     'post_status'    => 'publish',
-    //     'orderby'        => 'post__in',
-    //     'offset'         => intval($atts['offset']),
-    //     's'              => $current_post_title, // This filters based on title
-    //     'meta_query'     => array(
-    //         array(
-    //             'key'     => 'location',
-    //             'value'   => $current_post_location,
-    //             'compare' => 'LIKE'
-    //         )
-    //     )
-    // );		
     // Execute the query
-    // echo '<pre>'; print_r($args); echo '</pre>'; die();
     $query = new WP_Query($args);
     // Start output buffering
     ob_start();

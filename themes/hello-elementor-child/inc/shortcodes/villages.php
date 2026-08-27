@@ -95,14 +95,6 @@ add_shortcode('village_thank', 'vilages_thank_link');
 function vilages_thank_link()
 {
     ob_start();
-    /*if (isset($_GET['village'])) {
-        $ref_post_id = intval($_GET['village']);  ?>
-        <input type="hidden" name="referred_post_id" value="<?php echo $ref_post_id; ?>">
-        <?php $appointment_detail = get_field('thank_you_page_url', $ref_post_id); ?>
-        <input type="hidden" name="referred_post_id_new" value="<?php echo $appointment_detail; ?>">
-         <?php 
-    }*/
-
     if (isset($_GET['village'])) {
         $ref_post_title = sanitize_text_field($_GET['village']);
         // Look up the village by title. Previously get_page_by_title() (deprecated

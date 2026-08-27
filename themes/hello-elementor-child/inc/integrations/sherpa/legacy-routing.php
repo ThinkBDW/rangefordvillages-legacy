@@ -12,65 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 3351-3407: dead commented Sherpa API-URL experiments ---
-
-// add_action('wpcf7_before_send_mail', 'custom_change_api_url_based_on_post_id', 10, 1);
-
-// function custom_change_api_url_based_on_post_id($contact_form) {
-//     // Get the post ID
-//     $post_id = get_the_ID();
-
-//     // Check if the form is the specific one you want to target
-//     $form_id = $contact_form->id();
-
-//     if ($form_id == '10765') { // Replace YOUR_FORM_ID with your actual form ID
-//         if ($post_id) {
-//             // Set default company ID and community ID
-//             $company_id = 27;  // Default company ID
-//             $community_id = 2;  // Default community ID
-
-//             // Optionally change company_id and community_id based on post ID
-//             // You can replace this with logic to fetch the company and community IDs based on post_id
-//             if ($post_id == '651') {  // Replace 123 with your post ID
-//                 $company_id = 27; // Change company ID for specific post
-//                 $community_id = 2; // Change community ID for specific post
-//             }
-
-//             // Modify the API URL dynamically based on company and community ID
-//             $new_api_url = 'https://members.sherpacrm.co.uk/v1/companies/' . $company_id . '/communities/' . $community_id . '/leads';
-
-//             // Update the API URL (assuming Any API plugin uses option to store URL)
-//             update_option('cf7anyapi_base_url' . $form_id, $new_api_url);
-//         }
-//     }
-// }
-
-
-
-
-// function custom_cf7_update_post_meta( $contact_form ) {
-//     $submission = WPCF7_Submission::get_instance();
-//     if ( $submission ) {
-//         $data = $submission->get_posted_data();
-
-//         // Assuming 'post_id' is passed in the form data or obtained from context
-
-//             $post_id = intval( $data['post_id'] ); // Get the post ID
-
-//             // Construct the new API URL based on the post ID
-//             $new_url = 'https://members.sherpacrm.co.uk/v1/companies/27/communities/2/leads';
-
-
-//             // Update the post meta with the new URL
-//             update_post_meta( 17746, 'cf7anyapi_base_url', $new_url );
-
-//     }
-// }
-
-// add_action( 'wpcf7_before_send_mail', 'custom_cf7_update_post_meta' );
-
-
-
 // --- functions.php lines 3433-3548: custom_cf7_update_post_meta -- the cross-routing bug ---
 function custom_cf7_update_post_meta( $contact_form ) {
     $submission = WPCF7_Submission::get_instance();

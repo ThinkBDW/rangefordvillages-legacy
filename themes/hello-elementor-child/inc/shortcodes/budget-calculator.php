@@ -812,35 +812,3 @@ function recent_posts_function()
     return ob_get_clean();
 }
 
-
-
-
-// function custom_post_permalink($permalink, $post, $leavename) {
-//     // Ensure this code runs only for the default 'post' post type
-//     if ($post->post_type == 'post') {
-//         // Get the post's categories
-//         $category = get_the_category($post->ID);
-
-//         if ($category) {
-//             // Get the first category's slug
-//             $category_slug = $category[0]->slug;
-//             // Construct the new permalink structure
-//             $permalink = home_url('/' . $category_slug . '/' . $post->post_name . '/');
-
-//         } else {
-//             // If no category, use 'uncategorized'
-//             $permalink = home_url('/uncategorized/' . $post->post_name . '/');
-//         }
-//     }
-//     return $permalink;
-// }
-// add_filter('post_link', 'custom_post_permalink', 10, 3);
-
-// function custom_post_rewrite_rules($rules) {
-//     $new_rules = array(
-//         '([^/]+)/([^/]+)/?$' => 'index.php?category_name=$matches[1]&name=$matches[2]',
-//     );
-//     return $new_rules + $rules;
-// }
-// add_filter('rewrite_rules_array', 'custom_post_rewrite_rules');
-// functions.php or a custom plugin

@@ -24,27 +24,6 @@ function villages_thank_url_shortcode() {
 // Register the shortcode [villages_thank_url]
 add_shortcode('villages_thank_url', 'villages_thank_url_shortcode');
 
-/*Contact for submit after redirect to Thank you page */
-/*
-add_action('wp_footer', function () {
-    if (is_singular('villages')) {
-        ?>
-        <script type="text/javascript">
-            document.addEventListener('wpcf7mailsent', function(event) {
-                var thankYouUrlInput = document.querySelector('.villages-thank-url');
-                if (thankYouUrlInput && thankYouUrlInput.value) {
-                    window.location.href = thankYouUrlInput.value;
-                } else {
-                    window.location.href = '/thank-you';
-                }
-            });
-        </script>
-        <?php
-    } else {
-        redirect_cf7_with_referer();
-    }
-})*/
-
 
 // --- functions.php lines 1865-2076: wp_footer redirect + redirect_cf7_with_referer ---
 // Contact Form 7 redirect logic
