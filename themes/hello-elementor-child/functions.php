@@ -46,6 +46,9 @@ $rv_includes = array(
 	'cf7/redirects',
 	'ajax/brochures',
 	'cf7/mail',
+	// reCAPTCHA v3 out, Akismet in (2026-08-27). Must load before init:1,
+	// which is where the reCAPTCHA hooks are removed.
+	'cf7/spam',
 	'shortcodes/budget-calculator',
 	'integrations/sherpa/legacy-source-fields',
 	'integrations/sherpa/legacy-routing',
