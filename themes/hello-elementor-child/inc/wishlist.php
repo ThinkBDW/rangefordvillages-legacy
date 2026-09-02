@@ -2,9 +2,6 @@
 /**
  * Property wishlist (session-backed)
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 354-396). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 354-396: session bootstrap, handle_wishlist, whishlist_count ---
+// --- session bootstrap, handle_wishlist, whishlist_count ---
 
 // Start session if not already started
 if (!session_id()) {

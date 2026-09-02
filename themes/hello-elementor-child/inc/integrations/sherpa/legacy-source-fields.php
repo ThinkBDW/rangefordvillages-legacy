@@ -2,9 +2,6 @@
 /**
  * Sherpa CRM: legacy source attribution fields
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 3243-3276). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 3243-3276: populate_hidden_fields_with_acf_values ---
+// --- populate_hidden_fields_with_acf_values ---
 function populate_hidden_fields_with_acf_values() {
     // Check if the ACF plugin is active
 
@@ -41,9 +38,8 @@ function populate_hidden_fields_with_acf_values() {
                 sourceNameField.val('<?php echo esc_js($sherpa_source_name); ?>');
             }
 
-            // Folded in from custom-css-js #20145 at A3 (verbatim, minus a
-            // console.log): a "how did you hear about us" dropdown, where one
-            // exists, overrides the ACF default set above.
+            // A "how did you hear about us" dropdown, where a form has
+            // one, overrides the ACF default set above.
             $('#source-data').on('change',function(){
                 if($(this).val() != ""){
                     $(this).closest('form').find('input[name="sourceCategory"]').val($(this).val());

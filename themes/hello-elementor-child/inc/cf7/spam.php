@@ -2,10 +2,10 @@
 /**
  * Contact Form 7 spam protection.
  *
- * Decided 2026-08-27: reCAPTCHA v3 out, Akismet in.
+ * reCAPTCHA v3 out, Akismet in.
  *
  * WHY. CF7's built-in reCAPTCHA v3 integration was configured, with the site
- * keys living only in the `wpcf7` option (AUDIT.md §5.6). reCAPTCHA v3 has no
+ * keys living only in the `wpcf7` option. reCAPTCHA v3 has no
  * widget, so the way it works is to load Google's api.js on *every* page of the
  * site -- not just the pages that can submit -- and run a scoring routine on
  * each one. That is a third-party connection, a 200KB-ish script and main-thread
@@ -22,10 +22,9 @@
  *     With reCAPTCHA gone they no longer need carrying to SiteGround, which
  *     removes a way for every form on the new site to silently reject
  *     submissions as spam.
- *   - contact-form-7-honeypot goes from redundant to load-bearing. AUDIT.md
- *     §3.1 proposed dropping it as one of three overlapping layers; with
- *     reCAPTCHA removed it is the only check that costs nothing and involves no
- *     third party, so it stays on all seventeen forms.
+ *   - contact-form-7-honeypot goes from redundant to load-bearing: it is
+ *     now the only check that costs nothing and involves no third party,
+ *     so it stays on all seventeen forms.
  *
  * @package hello-elementor-child
  */
@@ -119,7 +118,7 @@ function rv_cf7_akismet_annotate_tag( $tag, $replace = false ) {
 	// The filter passes ( $scanned_tag, $replace ) and the tag is a plain array
 	// until WPCF7_FormTag wraps it just after. Guard anyway -- the inherited
 	// theme had this signature backwards, which is what fired 9,467 warnings a
-	// page load (AUDIT.md §6).
+	// page load.
 	if ( ! is_array( $tag ) || empty( $tag['name'] ) ) {
 		return $tag;
 	}
@@ -222,7 +221,7 @@ function rv_cf7_honeypot_is_active() {
  * state leaves only the honeypot and CF7's disallowed-list check.
  *
  * The lesson from the inherited install is that a form path which fails quietly
- * stays broken for months (AUDIT.md §5.4). Same principle: if the swap is only
+ * stays broken for months. Same principle: if the swap is only
  * half done, that has to be visible in wp-admin rather than inferred later from
  * a spike in junk enquiries.
  */

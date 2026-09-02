@@ -2,9 +2,6 @@
 /**
  * Contact Form 7: post-submission redirects
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 1833-1864, 1865-2076). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 1833-1864: [villages_thank_url] + dead commented redirect ---
+// --- [villages_thank_url] + dead commented redirect ---
 function villages_thank_url_shortcode() {
     // Fetch the 'thank_you_page_url' ACF field value
     $thank_you_page_url = get_field('thank_you_page_url');
@@ -25,7 +22,7 @@ function villages_thank_url_shortcode() {
 add_shortcode('villages_thank_url', 'villages_thank_url_shortcode');
 
 
-// --- functions.php lines 1865-2076: wp_footer redirect + redirect_cf7_with_referer ---
+// --- wp_footer redirect + redirect_cf7_with_referer ---
 // Contact Form 7 redirect logic
 add_action('wp_footer', function () {
 

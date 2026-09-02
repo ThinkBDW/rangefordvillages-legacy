@@ -2,9 +2,6 @@
 /**
  * Shared helpers
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 4121-4142). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 4121-4142: mm_village_panel() ---
+// --- mm_village_panel() ---
 function mm_village_panel($acf_field_name, $html_callback) {
     $image = get_field($acf_field_name, 'option');
 
@@ -36,7 +33,7 @@ function mm_village_panel($acf_field_name, $html_callback) {
  * HOMEWOOD GROVE
  */
 
-// --- added during takeover: replaces deprecated get_page_by_title() ---
+// --- rv_get_village_by_title: replaces deprecated get_page_by_title() ---
 
 /**
  * Look up a village post by its exact title.
@@ -74,11 +71,9 @@ function rv_get_village_by_title( $title ) {
 /**
  * Whether the queried singular page renders the budget calculator.
  *
- * The calculator's assets -- the theme's js/chart.js (200 KB) and the
- * budget-calculator plugin's html2canvas (198 KB), nouislider and
- * custom-calculator.js -- were all enqueued site-wide and unconditionally:
- * ~400 KB of JS on every page of the site for a widget that appears on a
- * handful of fees pages (AUDIT.md section 6). Both enqueues now gate on this.
+ * Gates ~400 KB of calculator-only JS -- the theme's chart.js, the
+ * budget-calculator plugin's html2canvas, nouislider and
+ * custom-calculator.js -- to the pages that actually render it.
  *
  * The shortcodes ([budget_calculator] from the theme, and the plugin's
  * [budget_calculator_custom]) live in plain post_content on some pages and

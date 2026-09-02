@@ -2,9 +2,6 @@
 /**
  * Shortcodes: galleries
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 1377-1473). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 1377-1473: [gallery_box], [village_category] ---
+// --- [gallery_box], [village_category] ---
 
 // / Gallery Lightbox
 function gallery_light_box()

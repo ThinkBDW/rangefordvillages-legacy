@@ -2,9 +2,6 @@
 /**
  * Custom post types and taxonomies
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 30-297). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 30-297: my_custom_post_product(): 5 CPTs + 4 taxonomies ---
+// --- my_custom_post_product(): 5 CPTs + 4 taxonomies ---
 // Properties Custom Post Type
 
 function my_custom_post_product()

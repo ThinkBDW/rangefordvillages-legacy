@@ -2,9 +2,6 @@
 /**
  * Contact Form 7: dynamic field values
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 1759-1785, 2135-2235, 3408-3432). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 1759-1785: type dash->space (form_tag filter is BROKEN, see cleanup commit) ---
+// --- type dash->space (form_tag filter is BROKEN, see cleanup commit) ---
 // Removed: customize_book_appointment_value() on wpcf7_form_tag.
 //
 // Its signature was ( $value, $tag ), but the wpcf7_form_tag filter passes
@@ -40,7 +37,7 @@ function cf7_change_booking_type_format($posted_data)
 add_filter('wpcf7_posted_data', 'cf7_change_booking_type_format');
 
 
-// --- functions.php lines 2135-2235: dead dynamic_field_values + dynamic_village_field_values ---
+// --- dead dynamic_field_values + dynamic_village_field_values ---
 function dynamic_village_field_values($tag, $unused) {
     $qo = get_queried_object();
 
@@ -115,7 +112,7 @@ function dynamic_village_field_values($tag, $unused) {
 add_filter('wpcf7_form_tag', 'dynamic_village_field_values', 10, 2);
 
 
-// --- functions.php lines 3408-3432: add_referral_datetime + add_hidden_page_id_script ---
+// --- add_referral_datetime + add_hidden_page_id_script ---
 add_filter('wpcf7_posted_data', 'add_referral_datetime');
 
 function add_referral_datetime($posted_data) {

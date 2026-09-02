@@ -2,9 +2,6 @@
 /**
  * Shortcode: hero slider
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 397-515). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 397-515: [hero_slider_shortcode] ---
+// --- [hero_slider_shortcode] ---
 
 function custom_html_shortcode()
 {

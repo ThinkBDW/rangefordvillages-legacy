@@ -2,9 +2,6 @@
 /**
  * Shortcodes: miscellaneous
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 1317-1324, 1336-1360, 3277-3327). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 1317-1324: [current_year] ---
+// --- [current_year] ---
 // / Current Year
 function current_year_shortcode()
 {
@@ -22,7 +19,7 @@ function current_year_shortcode()
 add_shortcode('current_year', 'current_year_shortcode');
 
 
-// --- functions.php lines 1336-1360: [last_modified_date] ---
+// --- [last_modified_date] ---
 
 // Add lastmodified post date
 
@@ -49,7 +46,7 @@ function last_modified_date_shortcode()
 add_shortcode('last_modified_date', 'last_modified_date_shortcode');
 
 
-// --- functions.php lines 3277-3327: [category_button] ---
+// --- [category_button] ---
 function get_category_button_shortcode() {
     // Check if we're on a single post page
     if (is_single()) {

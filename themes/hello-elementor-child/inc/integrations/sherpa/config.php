@@ -248,7 +248,7 @@ return array(
 	),
 
 	// was connector 28731. Routed on the event venue. The old mapping omitted
-	// howdidyouhear entirely (AUDIT.md 5.2) -- restored here.
+	// howdidyouhear entirely -- restored here.
 	22416 => array(
 		'community' => array(
 			'by_field' => 'venue-title',

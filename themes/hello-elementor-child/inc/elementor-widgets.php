@@ -2,9 +2,6 @@
 /**
  * Elementor widget registration
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 1325-1335). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 1325-1335: Custom_Slider_Widget registration ---
+// --- Custom_Slider_Widget registration ---
 
 add_action('elementor/widgets/widgets_registered', 'register_custom_slider_widget');
 

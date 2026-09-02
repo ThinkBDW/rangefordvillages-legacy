@@ -2,9 +2,6 @@
 /**
  * AJAX: properties
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 320-353, 942-1149). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 320-353: count_filtered_properties + get_total_filtered_posts ---
+// --- count_filtered_properties + get_total_filtered_posts ---
 function count_filtered_properties($args)
 {
     // Clone the args to avoid modifying the original query arguments
@@ -48,7 +45,7 @@ function count_filtered_properties_callback()
 add_action('wp_ajax_get_total_filtered_posts', 'count_filtered_properties_callback');
 add_action('wp_ajax_nopriv_get_total_filtered_posts', 'count_filtered_properties_callback');
 
-// --- functions.php lines 942-1149: load_more_properties ---
+// --- load_more_properties ---
 add_action('wp_ajax_nopriv_load_more_properties', 'load_more_properties');
 add_action('wp_ajax_load_more_properties', 'load_more_properties');
 

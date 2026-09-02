@@ -1,11 +1,9 @@
 /*
- * Google Map for village/property pages. Recovered verbatim from
- * Elementor Pro Custom Code post #19421 (location elementor_body_end)
- * during the 2026 takeover (A3); the external maps-api loader that
- * preceded it is enqueued separately in inc/enqueue.php with
- * callback=initMap, matching the original tag.
- * Expects the mapData/mainLocation globals printed by the [display_map]
- * shortcode (inc/shortcodes/maps.php).
+ * Google Map for village/property pages. Recovered verbatim from Elementor
+ * Pro Custom Code post #19421; the external maps-api loader that preceded
+ * it is enqueued separately in inc/enqueue.php with callback=initMap,
+ * matching the original tag. Expects the mapData/mainLocation globals
+ * printed by the maps shortcode (inc/shortcodes/maps.php).
  */
 let map; 
 let markers = [];

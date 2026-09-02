@@ -2,9 +2,6 @@
 /**
  * Elementor custom query hooks
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 1291-1316, 1474-1487, 3328-3350). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 1291-1316: elementor/query/show_home1 ---
+// --- elementor/query/show_home1 ---
 function my_query_by_post_meta($query)
 {
 
@@ -40,7 +37,7 @@ add_action('elementor/query/show_home1', 'my_query_by_post_meta');
 
 
 
-// --- functions.php lines 1474-1487: elementor/query/gallery_parent + dead comment ---
+// --- elementor/query/gallery_parent + dead comment ---
 function my_query_by_different_order($query)
 {
     $query->set('post_parent', 0);
@@ -56,7 +53,7 @@ add_action('elementor/query/gallery_parent', 'my_query_by_different_order');
 
 
 
-// --- functions.php lines 3328-3350: elementor/query/exclude-feature ---
+// --- elementor/query/exclude-feature ---
 function my_query_by_post_meta_exclude( $query ) {
 
     // Get current meta Query

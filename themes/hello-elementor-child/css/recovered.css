@@ -1,18 +1,14 @@
 /*
- * Site CSS recovered from the database during the 2026 takeover (A3).
+ * Site CSS recovered from the database, verbatim:
+ *   1. The Customizer's "Additional CSS" for this theme (custom_css post
+ *      #19440), printed site-wide by core at the end of wp_head.
+ *   2. header-footer-code-manager snippet #1, a site-wide header <style>
+ *      block (entity-decoded, style tags removed).
  *
- * Sources, verbatim:
- *   1. The Customizer's Additional CSS -- core custom_css post #19440
- *      ("hello-elementor-child"), 50,127 bytes, printed site-wide by core
- *      in wp_head. NOT the custom-css-js plugin, despite the audit's
- *      original attribution: emptying that Customizer entry, not removing
- *      a plugin, is what retires the original.
- *   2. header-footer-code-manager snippet #1, site-wide <style> block in
- *      the header (HTML-entity-decoded, style tags removed).
- *
- * Enqueued after new-style.css to preserve the original cascade order.
- * The custom-css-js and header-footer-code-manager plugins are removed at
- * cutover (RUNBOOK.md section 5, group 1).
+ * Enqueued last (wp_enqueue_scripts:999, inc/enqueue.php) to preserve the
+ * originals' late cascade position. The originals are retired -- the
+ * Customizer entry emptied, the HFCM row deactivated -- and this file is
+ * what restores them if ever needed.
  */
 
 #custom-google-map button.gm-ui-hover-effect[title="Close"] { width: auto !important; height: auto !important; position: absolute !important; right: 8px; top: 8px; } 

@@ -1,8 +1,7 @@
 /*
- * Events-archive category list behaviour. Recovered verbatim from
- * Elementor Pro Custom Code post #19743 (location elementor_body_end)
- * during the 2026 takeover (A3). The display condition was
- * include/archive/tribe_events_archive, reproduced in inc/enqueue.php.
+ * Events-archive category list behaviour. Recovered verbatim from Elementor
+ * Pro Custom Code post #19743; its display condition (the events archive,
+ * category archives included) is reproduced in inc/enqueue.php.
  */
 jQuery(document).ready(function () {
    function updateEventCategoryList() {

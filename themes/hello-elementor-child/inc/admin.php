@@ -2,9 +2,6 @@
 /**
  * wp-admin tweaks
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 1361-1376). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 1361-1376: change_post_menu_label ---
+// --- change_post_menu_label ---
 /*Post Menu Name Change */
 function change_post_menu_label()
 {

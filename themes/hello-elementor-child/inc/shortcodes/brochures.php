@@ -2,9 +2,6 @@
 /**
  * Shortcodes: brochures
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 1488-1570, 1646-1730). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 1488-1570: [broucher_category] ---
+// --- [broucher_category] ---
 /*Broucher category list */
 add_shortcode('broucher_category', 'broucher_category_list');
 function broucher_category_list()
@@ -97,7 +94,7 @@ function broucher_category_list()
 }
 
 
-// --- functions.php lines 1646-1730: [brochure_contact], [secondary_brochure_contact] ---
+// --- [brochure_contact], [secondary_brochure_contact] ---
 /*Download brochure  page link */
 add_shortcode('brochure_contact', 'brochure_conatct_link');
 function brochure_conatct_link($atts)

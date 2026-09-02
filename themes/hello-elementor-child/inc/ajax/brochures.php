@@ -2,9 +2,6 @@
 /**
  * AJAX: brochures
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 2077-2134). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 2077-2134: get_brochure_link ---
+// --- get_brochure_link ---
 function get_brochure_link() {
 
     if ( empty($_POST['post_id_brochure']) ) {

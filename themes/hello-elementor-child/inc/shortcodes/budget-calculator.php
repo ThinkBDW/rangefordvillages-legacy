@@ -2,9 +2,6 @@
 /**
  * Shortcode: budget calculator (legacy theme copy)
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 2299-3129). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 2299-3129: [budget_calculator] -- duplicate of the plugin, 42 uses ---
+// --- [budget_calculator] -- duplicate of the plugin, 42 uses ---
 add_shortcode('budget_calculator', 'recent_posts_function');
 function recent_posts_function()
 {

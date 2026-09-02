@@ -2,9 +2,6 @@
 /**
  * Shortcodes: property listings
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 516-941, 1150-1290). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 516-941: [home_properties], [village_properties] ---
+// --- [home_properties], [village_properties] ---
 /*Home page properties shortcode */
 add_shortcode('home_properties', 'home_page_properties');
 function home_page_properties($atts)
@@ -408,7 +405,7 @@ function vilages_page_properties($atts)
 
 
 
-// --- functions.php lines 1150-1290: [home_properties_three_row] ---
+// --- [home_properties_three_row] ---
 add_shortcode('home_properties_three_row', 'home_page_properties_three');
 function home_page_properties_three()
 {

@@ -2,16 +2,14 @@
 /**
  * hello-elementor-child theme bootstrap.
  *
- * This file was 4,487 lines until the 2026-08 takeover refactor. It is now a
- * loader only -- see inc/ for the code, which was moved verbatim.
+ * A loader only -- the code lives in inc/.
  *
- * The include order below deliberately mirrors the order things appeared in the
- * original functions.php. That matters in two places:
+ * The include order matters in two places:
  *
  *   - inc/wishlist.php calls session_start() at include time, so it must stay
  *     after the enqueue and post-type registrations, as it was before.
- *   - the two library/ requires bracketed the file (lines 7 and 4057) and may
- *     define helpers used by the code between them.
+ *   - the two library/ requires may define helpers used by the code
+ *     between them, so they keep their positions.
  *
  * Do not reorder without checking both.
  *
@@ -28,8 +26,8 @@ $rv_includes = array(
 	// defines functions and has no load-time side effects.
 	'helpers',
 	'media',
-	// GTM, recovered at A3 from Elementor Pro Custom Code posts. Holds
-	// rv_legacy_snippets_active(), which inc/enqueue.php also gates on.
+	// GTM. Also defines rv_legacy_snippets_active(), which inc/enqueue.php
+	// gates the recovered map/events JS on.
 	'analytics',
 	'enqueue',
 	'post-types',
@@ -49,14 +47,11 @@ $rv_includes = array(
 	'cf7/redirects',
 	'ajax/brochures',
 	'cf7/mail',
-	// reCAPTCHA v3 out, Akismet in (2026-08-27). Must load before init:1,
-	// which is where the reCAPTCHA hooks are removed.
+	// Must load before init:1, where it removes CF7's reCAPTCHA hooks.
 	'cf7/spam',
 	'shortcodes/budget-calculator',
 	'integrations/sherpa/legacy-source-fields',
-	// legacy-routing.php and the contact-form-to-any-api plugin were removed
-	// together at cutover (2026-09-02); the code-based integration below is
-	// now the only delivery path. RV_SHERPA_DRY_RUN gates real POSTs.
+	// The only lead delivery path. RV_SHERPA_DRY_RUN gates real POSTs.
 	'integrations/sherpa/bootstrap',
 	'shortcodes/maps',
 	'events',

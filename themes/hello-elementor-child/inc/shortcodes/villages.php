@@ -2,9 +2,6 @@
 /**
  * Shortcodes: village contact CTAs
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 1571-1645, 1731-1758). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 1571-1645: [village_contact], [arrange_contact], [request_contact], [village_form_contact] ---
+// --- [village_contact], [arrange_contact], [request_contact], [village_form_contact] ---
 /*Village contact page link */
 add_shortcode('village_contact', 'vilages_conatct_link');
 function vilages_conatct_link()
@@ -89,7 +86,7 @@ add_shortcode('village_form_contact', function(){
 });
 
 
-// --- functions.php lines 1731-1758: [village_thank] ---
+// --- [village_thank] ---
 add_shortcode('village_thank', 'vilages_thank_link');
 
 function vilages_thank_link()

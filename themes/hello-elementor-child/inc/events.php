@@ -2,9 +2,6 @@
 /**
  * The Events Calendar integration
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 3765-4054, 4059-4065). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,8 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 3765-4054: TEC events-bar selectors, [events_by_village_category], [event_categories] ---
-// (Four abandoned drafts of an events-bar category list were removed here.)
+// --- TEC events-bar selectors, [events_by_village_category], [event_categories] ---
 // Add a hook to modify day, month, and year filter links to preserve the selected category
 add_filter( 'tribe_events_bar_month_selector', function( $html ) {
     if ( isset( $_GET['tribe_events_cat'] ) ) {
@@ -177,7 +173,7 @@ add_shortcode( 'event_categories', 'the_events_calendar_category_list_shortcode'
 
 /** GT */
 
-// --- functions.php lines 4059-4065: tribe_events_after_template ---
+// --- tribe_events_after_template ---
 add_action('tribe_events_after_template', function() {
     echo '<div class="custom-events-footer" style="padding: 20px; background: #eee; text-align: center;display:none;">
             <h3>Join Us for More Events!</h3>

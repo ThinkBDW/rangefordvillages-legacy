@@ -2,9 +2,6 @@
 /**
  * Front-end asset enqueues
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 9-29, 298-319). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 9-29: Child Theme Configurator auto-generated block ---
+// --- Child Theme Configurator auto-generated block ---
 // BEGIN ENQUEUE PARENT ACTION
 // AUTO GENERATED - Do not modify or remove comment markers above or below:
 
@@ -35,24 +32,21 @@ endif;
 add_action('wp_enqueue_scripts', 'child_theme_configurator_css', 10);
 
 
-// --- functions.php lines 298-319: enqueue_custom_scripts() ---
+// --- enqueue_custom_scripts() ---
 
 function enqueue_custom_scripts()
 {
     wp_enqueue_script('slick-js', get_stylesheet_directory_uri() . '/js/slick.min.js', array('jquery'), '1.0', true);
+    // Only the minified slick sheet: css/slick.css is the identical
+    // unminified copy, and css/slick-theme.css has never been enqueued --
+    // adding it would restyle every carousel.
     wp_enqueue_style('slick-min-css', get_stylesheet_directory_uri() . '/css/slick.min.css');
-    // css/slick.css (the unminified copy of the same sheet) was enqueued as
-    // well -- identical rules shipped twice. Removed at A3. css/slick-theme.css
-    // was never enqueued at all and stays that way: adding it now would
-    // restyle every carousel.
     wp_enqueue_script('custom-scripts', get_stylesheet_directory_uri() . '/js/custom.js', array('jquery'), '1.0', true);
-    // time() as the version defeated all browser and CDN caching -- a new
-    // asset URL on every page load (AUDIT.md section 6). filemtime() busts
-    // the cache only when the file actually changes.
+    // filemtime, not time(): a time() version mints a new URL on every
+    // page load, so no browser or CDN ever caches the file.
     wp_enqueue_script('custom-scripts-new', get_stylesheet_directory_uri() . '/js/custom-new.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/custom-new.js'), true);
     // js/chart.js is only consumed by the budget-calculator plugin's
-    // custom-calculator.js, but was enqueued on every page of the site --
-    // 200 KB of JS on pages with no chart (AUDIT.md section 6).
+    // custom-calculator.js -- 200 KB with no reader on any other page.
     if (rv_is_budget_calculator_page()) {
         wp_enqueue_script('chart-js', get_stylesheet_directory_uri() . '/js/chart.js', array('jquery'), '1.0', true);
     }
@@ -61,7 +55,7 @@ function enqueue_custom_scripts()
 
 
 
-    // --- Code recovered from the database at A3 (PROGRESS.md section 3) ---
+    // --- Code recovered from the database (Elementor Pro Custom Code) ---
 
     // The recovered JS must NOT run while the original Elementor Pro Custom
     // Code posts are still published: the map would initialise twice and the
@@ -98,16 +92,13 @@ function enqueue_custom_scripts()
 
 add_action('wp_enqueue_scripts', 'enqueue_custom_scripts');
 
-// Site CSS recovered at A3 from the Customizer's Additional CSS (core
-// custom_css post #19440 -- NOT the custom-css-js plugin, despite the
-// audit's original attribution) plus HFCM snippet #1. Both originals
-// printed at or near the END of wp_head, after every enqueued stylesheet,
-// so equal-specificity ties resolved in their favour. Priority 999 queues
-// this file after everything else (including Elementor's page CSS) to
-// preserve that cascade position as closely as an enqueued file can.
-// The originals are retired by emptying the Customizer entry and
-// deactivating the HFCM row -- both content, both restorable from this
-// file if the pre-cutover visual QA finds a difference.
+// Site CSS recovered from the database: the Customizer's Additional CSS
+// (custom_css post #19440) plus a header-footer-code-manager block. Both
+// originals printed at or near the END of wp_head, after every enqueued
+// stylesheet, so equal-specificity ties resolved in their favour;
+// priority 999 queues this file after everything else (including
+// Elementor's page CSS) to preserve that position as closely as an
+// enqueued file can. The retired originals are restorable from this file.
 function rv_enqueue_recovered_css() {
     wp_enqueue_style('rv-recovered-css', get_stylesheet_directory_uri() . '/css/recovered.css', array('new-css'), filemtime(get_stylesheet_directory() . '/css/recovered.css'));
 }

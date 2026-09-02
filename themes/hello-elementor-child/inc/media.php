@@ -2,12 +2,12 @@
 /**
  * Media and upload governance.
  *
- * Added during the 2026-08 takeover. The theme previously had no image or
+ * The theme previously had no image or
  * upload filter of any kind -- no add_image_size(), no quality setting, no
  * threshold -- so every sizing decision came from core defaults and nothing
  * stopped print-resolution masters accumulating.
  *
- * The problem this solves: at takeover, uploads/ was 26.7GB, of which 15GB was
+ * The problem this solves: uploads/ had grown to 26.7GB, of which 15GB was
  * full-resolution masters that WordPress had already superseded with "-scaled"
  * copies and never served again. Pruning them once is a one-off
  * (audit/scripts/media/prune-masters.php); these filters are what stop the

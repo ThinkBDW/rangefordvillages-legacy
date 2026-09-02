@@ -2,9 +2,6 @@
 /**
  * Contact Form 7: outgoing mail
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 2236-2298, 3130-3242). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 2236-2298: wpcf7_custom_email_recipient ---
+// --- wpcf7_custom_email_recipient ---
 function wpcf7_custom_email_recipient($contact_form) {
     $form_id = $contact_form->id();
     $submission = WPCF7_Submission::get_instance();
@@ -77,7 +74,7 @@ function wpcf7_custom_email_recipient($contact_form) {
 add_action('wpcf7_before_send_mail', 'wpcf7_custom_email_recipient');
 
 
-// --- functions.php lines 3130-3242: custom_add_hidden_fields_to_email + dead blocks ---
+// --- custom_add_hidden_fields_to_email + dead blocks ---
 add_action('wpcf7_before_send_mail', 'custom_add_hidden_fields_to_email');
 
 function custom_add_hidden_fields_to_email($contact_form) {

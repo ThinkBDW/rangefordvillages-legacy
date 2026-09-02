@@ -7,10 +7,10 @@
  * LOSSLESS. Every lead is written here BEFORE any HTTP call is attempted. A CRM
  * outage, a broken queue, a fatal in the dispatcher or a rollback of the site
  * cannot lose an enquiry, because the enquiry is already committed. That is the
- * whole reason the table exists: the inherited integration discarded 69 leads in
- * 2026 on a bare HTTP 500, with no retry and no alert (AUDIT.md §5.4).
+ * whole reason the table exists: the integration this replaces discarded
+ * leads on a bare HTTP 500, with no retry and no alert.
  *
- * MINIMAL. Decided 2026-08-27: WordPress is not to be a second, permanent copy
+ * MINIMAL. WordPress is not to be a second, permanent copy
  * of the enquiry book. Once a lead is in Sherpa, Sherpa is the system of record,
  * and there is no business reason to keep the enquirer's name, email, phone and
  * address sitting in a database that is dumped to a developer laptop on every

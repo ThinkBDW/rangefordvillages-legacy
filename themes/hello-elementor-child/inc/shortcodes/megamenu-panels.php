@@ -2,9 +2,6 @@
 /**
  * Shortcodes: mega-menu panels
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 4143-4487). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 4143-4487: 15 mm_* mega-menu panel shortcodes (file ends //EOF, no trailing newline) ---
+// --- 15 mm_* mega-menu panel shortcodes (file ends //EOF, no trailing newline) ---
 add_shortcode('mm_homewood_grove', function() {
     return mm_village_panel('homewood_grove_bg', function() {
 

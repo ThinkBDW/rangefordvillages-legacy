@@ -2,9 +2,6 @@
 /**
  * Rewrite rules and query vars
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 1786-1832). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 1786-1832: custom_rewrite_rule + custom_query_vars ---
+// --- custom_rewrite_rule + custom_query_vars ---
 // Rewrite Rules
 function custom_rewrite_rule($rules)
 {

@@ -2,20 +2,14 @@
 /**
  * Google Tag Manager (GTM-TTQQDVM)
  *
- * Recovered verbatim from Elementor Pro Custom Code posts #3468 (location
- * elementor_head, priority 1) and #3469 (elementor_body_start) during the
- * 2026 takeover, task A3. The audit originally attributed these snippets to
- * the ele-custom-skin plugin; they are in fact elementor_snippet posts, i.e.
- * CONTENT -- which is why they came back with every database pull and why
- * removing plugins at cutover would never have stopped them loading. Both
- * ran site-wide (condition include/general).
+ * The container and noscript iframe originally lived in the database as
+ * Elementor Pro Custom Code posts #3468 / #3469 -- content, so they return
+ * with any production pull. They print here instead, verbatim, site-wide.
  *
- * Guarded on those posts no longer being PUBLISHED: while a snippet post is
- * live, Elementor Pro still prints the original, and printing a second
- * container would double-fire every tag and corrupt analytics. Setting the
- * snippet posts to draft flips this copy live in the same request -- no gap,
- * no overlap -- and republishing them is the instant rollback. GTM Preview
- * sign-off before cutover is still required: RUNBOOK.md section 8.
+ * Guarded on those posts staying UNPUBLISHED: while one is published,
+ * Elementor Pro prints the original, and a second container here would
+ * double-fire every tag. The guard makes republishing a snippet post a
+ * safe one-step rollback, with no gap and no overlap either way.
  *
  * @package hello-elementor-child
  */
@@ -25,11 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Whether any of the recovered Elementor Pro Custom Code posts is still
- * published (GTM head/body here, plus the map and events JS gated in
- * inc/enqueue.php). One all-or-nothing switch so the parallel state cannot
- * half-overlap: republishing ANY of the four suppresses ALL the theme
- * copies.
+ * Whether any of the recovered Elementor Pro Custom Code posts is
+ * published again (GTM head/body here, plus the map and events JS gated in
+ * inc/enqueue.php). All-or-nothing: republishing ANY of the four
+ * suppresses ALL the theme copies, so the two sources cannot
+ * half-overlap.
  *
  * @return bool
  */

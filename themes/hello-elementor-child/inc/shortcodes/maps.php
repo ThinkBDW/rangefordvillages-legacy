@@ -2,9 +2,6 @@
 /**
  * Shortcodes: Google maps
  *
- * Moved verbatim from functions.php during the takeover refactor
- * (was lines 3549-3764). No behaviour change in the move commit.
- *
  * @package hello-elementor-child
  */
 
@@ -12,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- functions.php lines 3549-3764: [custom_google_map] (+ dead plural dupe), [property_main_location_url] ---
+// --- [custom_google_map] (+ dead plural dupe), [property_main_location_url] ---
 // Removed: custom_google_map_repeater_shortcodes() -- a ~70-line copy of the
 // function below, differing only by the trailing 's' in its name. It was never
 // called and never registered as a shortcode.
