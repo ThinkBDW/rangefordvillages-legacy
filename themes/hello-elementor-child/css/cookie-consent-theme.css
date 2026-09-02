@@ -1,0 +1,40 @@
+/*
+ * Brand overrides for the vanilla-cookieconsent modals (css/cookieconsent.css
+ * holds the library defaults). Palette: #003655 deep blue, #C2BB86 gold.
+ */
+.cm-wrapper,
+.pm-wrapper {
+    --cc-bg: #ffffff;
+    --cc-primary-color: #003655;
+    --cc-secondary-color: #33424c;
+
+    --cc-btn-primary-bg: #003655;
+    --cc-btn-primary-border-color: #003655;
+    --cc-btn-primary-color: #ffffff;
+    --cc-btn-primary-hover-bg: #C2BB86;
+    --cc-btn-primary-hover-border-color: #C2BB86;
+    --cc-btn-primary-hover-color: #003655;
+
+    --cc-btn-secondary-bg: #eeece3;
+    --cc-btn-secondary-border-color: #eeece3;
+    --cc-btn-secondary-color: #003655;
+    --cc-btn-secondary-hover-bg: #ffffff;
+    --cc-btn-secondary-hover-border-color: #C2BB86;
+    --cc-btn-secondary-hover-color: #003655;
+
+    --cc-toggle-on-bg: #003655;
+    --cc-toggle-off-bg: #8a97a0;
+    --cc-toggle-readonly-bg: #d8d8d8;
+
+    --cc-cookie-category-block-bg: #f4f3ee;
+    --cc-cookie-category-block-border: #f4f3ee;
+    --cc-cookie-category-block-hover-bg: #eeece3;
+    --cc-cookie-category-block-hover-border: #eeece3;
+    --cc-cookie-category-expanded-block-bg: #f4f3ee;
+    --cc-cookie-category-expanded-block-hover-bg: #f4f3ee;
+
+    --cc-separator-border-color: #e5e2d6;
+    --cc-footer-border-color: #e5e2d6;
+    --cc-footer-bg: #f4f3ee;
+    --cc-overlay-bg: rgba(0, 54, 85, 0.75);
+}

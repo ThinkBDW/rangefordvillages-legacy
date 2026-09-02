@@ -103,3 +103,14 @@ function rv_enqueue_recovered_css() {
     wp_enqueue_style('rv-recovered-css', get_stylesheet_directory_uri() . '/css/recovered.css', array('new-css'), filemtime(get_stylesheet_directory() . '/css/recovered.css'));
 }
 add_action('wp_enqueue_scripts', 'rv_enqueue_recovered_css', 999);
+
+// Cookie consent (vanilla-cookieconsent, vendored). Site-wide: it is what
+// legitimises every cookie-setting tag in GTM, so it must be on every page
+// the container is. js/cookie-consent.js explains the GTM contract.
+function rv_enqueue_cookie_consent() {
+    wp_enqueue_style('rv-cookieconsent', get_stylesheet_directory_uri() . '/css/cookieconsent.css', array(), '3.1.0');
+    wp_enqueue_style('rv-cookieconsent-theme', get_stylesheet_directory_uri() . '/css/cookie-consent-theme.css', array('rv-cookieconsent'), filemtime(get_stylesheet_directory() . '/css/cookie-consent-theme.css'));
+    wp_enqueue_script('rv-cookieconsent', get_stylesheet_directory_uri() . '/js/vendor/cookieconsent.umd.js', array(), '3.1.0', true);
+    wp_enqueue_script('rv-cookie-consent-config', get_stylesheet_directory_uri() . '/js/cookie-consent.js', array('rv-cookieconsent'), filemtime(get_stylesheet_directory() . '/js/cookie-consent.js'), true);
+}
+add_action('wp_enqueue_scripts', 'rv_enqueue_cookie_consent');

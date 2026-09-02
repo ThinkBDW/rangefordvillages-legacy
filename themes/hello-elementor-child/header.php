@@ -22,7 +22,12 @@ $skip_link_url = apply_filters( 'hello_elementor_skip_link_url', '#content' );
 	<meta name="viewport" content="<?php echo esc_attr( $viewport_content ); ?>">
 	<link rel="profile" href="https://gmpg.org/xfn/11">
 	<?php wp_head(); ?>
-	<script src="https://c4b.online/embed/c4b-embed.js.php?licence=5d3776d9-cf7b-41e1-8c77-6f5d51537ef7" defer></script>
+	<?php
+	// No tracking or chat scripts may be hardcoded here: anything that sets
+	// cookies loads via GTM, triggered by the consent events pushed from
+	// js/cookie-consent.js. The Click4Assistance embed (c4b.online, licence
+	// 5d3776d9-cf7b-41e1-8c77-6f5d51537ef7) moved to a consent-gated GTM tag.
+	?>
 	<!-- Header Menu Hover overlay script Start -->
 	<script>
 		jQuery(document).ready(function ($) {
