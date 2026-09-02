@@ -1,0 +1,62 @@
+/*
+ * Brochure modals -- the layout popup-maker's generated stylesheet provided.
+ *
+ * Only the structural part lives here. The brand appearance still comes from
+ * the #popmake-10766 / #popmake-32688 rules already in style.css and
+ * new-style.css (background #003655, 70px padding, 92px radius), which is why
+ * everything below is class-based: ID selectors must keep winning.
+ *
+ * Values taken from the stored popup_settings and popup theme 7888 ("Light
+ * Box") so the rendering is unchanged: 640px wide, centre-top, black overlay
+ * at 60%, 26x26 close button top-right.
+ */
+
+.rv-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1999999999;
+    display: none;
+    overflow-y: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    -webkit-overflow-scrolling: touch;
+}
+
+.rv-modal-overlay.rv-modal-open {
+    display: block;
+}
+
+body.rv-modal-is-open {
+    overflow: hidden;
+}
+
+.rv-modal-overlay .rv-modal {
+    position: relative;
+    width: 640px;
+    max-width: calc(100% - 32px);
+    margin: 6vh auto 40px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    box-shadow: 0 0 30px 0 rgba(2, 2, 2, 1);
+}
+
+.rv-modal-overlay .pum-close.popmake-close {
+    position: absolute;
+    top: -13px;
+    right: -13px;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+    background-color: #000000;
+    color: #ffffff;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+}
+
+@media (max-width: 767px) {
+    .rv-modal-overlay .rv-modal {
+        margin-top: 3vh;
+    }
+}

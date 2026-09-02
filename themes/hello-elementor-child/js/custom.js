@@ -40,10 +40,13 @@ jQuery(document).ready(function ($) {
         window.lastClickedBrochureButton = $(this);
 
         var popupId = $(this).data('popmake');
-        if (popupId && typeof PUM !== 'undefined' && typeof PUM.open === 'function') {
+        // Was PUM.open() until popup-maker was removed; inc/brochure-modal.php
+        // exposes the same behaviour. Propagation is stopped so the delegated
+        // .single-brochure-view-button handler cannot also open 10766.
+        if (popupId && window.rvBrochureModal) {
             e.stopImmediatePropagation();
             e.stopPropagation();
-            PUM.open(popupId);
+            window.rvBrochureModal.open(popupId);
             return false;
         }
     });

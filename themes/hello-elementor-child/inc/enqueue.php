@@ -104,6 +104,18 @@ function rv_enqueue_recovered_css() {
 }
 add_action('wp_enqueue_scripts', 'rv_enqueue_recovered_css', 999);
 
+// Brochure modals -- replaces popup-maker (inc/brochure-modal.php explains
+// why the popmake-* class names are kept). Site-wide because the triggers are
+// spread across Elementor content, the mega menu and single-properties.php.
+// js/custom.js hands off to window.rvBrochureModal, but only from a click
+// handler, and the API is assigned as soon as this file executes -- so load
+// order between the two does not matter.
+function rv_enqueue_brochure_modal() {
+    wp_enqueue_style('rv-brochure-modal', get_stylesheet_directory_uri() . '/css/brochure-modal.css', array(), filemtime(get_stylesheet_directory() . '/css/brochure-modal.css'));
+    wp_enqueue_script('rv-brochure-modal', get_stylesheet_directory_uri() . '/js/brochure-modal.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/brochure-modal.js'), true);
+}
+add_action('wp_enqueue_scripts', 'rv_enqueue_brochure_modal');
+
 // Cookie consent (vanilla-cookieconsent, vendored). Site-wide: it is what
 // legitimises every cookie-setting tag in GTM, so it must be on every page
 // the container is. js/cookie-consent.js explains the GTM contract.

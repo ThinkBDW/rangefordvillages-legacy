@@ -50,6 +50,7 @@ $rv_includes = array(
 	// Must load before init:1, where it removes CF7's reCAPTCHA hooks.
 	'cf7/spam',
 	'shortcodes/budget-calculator',
+	'brochure-modal',
 	'integrations/sherpa/legacy-source-fields',
 	// The only lead delivery path. RV_SHERPA_DRY_RUN gates real POSTs.
 	'integrations/sherpa/bootstrap',
