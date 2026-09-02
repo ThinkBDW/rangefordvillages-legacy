@@ -498,10 +498,12 @@ function sort_and_paginate_properties()
     <?php
 
     wp_reset_postdata();
-    // Your existing code for filtering and pagination
-
-    // Call the function to get the total count of filtered properties
-    $total_filtered_posts = count_filtered_properties($args);
+    // The main query above already computed the unpaginated total via
+    // SQL_CALC_FOUND_ROWS. Re-running the whole filtered query with
+    // posts_per_page = -1 (count_filtered_properties) fetched every matching
+    // property row and primed its meta cache just to count them -- the single
+    // most expensive query on this endpoint.
+    $total_filtered_posts = (int) $query->found_posts;
 
     // Output the total count
     echo '<p style="display:none;" class="total-properties">' . $total_filtered_posts . '</p>';

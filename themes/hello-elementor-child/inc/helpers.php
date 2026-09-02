@@ -47,10 +47,18 @@ function mm_village_panel($acf_field_name, $html_callback) {
  * @return WP_Post|null The village post, or null if there is no exact match.
  */
 function rv_get_village_by_title( $title ) {
+	// Memoised per request: the property listings call this once per tile,
+	// and every tile in a village resolves the same handful of titles.
+	static $cache = array();
+
 	$title = trim( (string) $title );
 
 	if ( '' === $title ) {
 		return null;
+	}
+
+	if ( array_key_exists( $title, $cache ) ) {
+		return $cache[ $title ];
 	}
 
 	$posts = get_posts(
@@ -65,7 +73,9 @@ function rv_get_village_by_title( $title ) {
 		)
 	);
 
-	return $posts ? $posts[0] : null;
+	$cache[ $title ] = $posts ? $posts[0] : null;
+
+	return $cache[ $title ];
 }
 
 /**
