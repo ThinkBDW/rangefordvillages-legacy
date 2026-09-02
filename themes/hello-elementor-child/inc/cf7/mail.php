@@ -130,3 +130,87 @@ function custom_add_hidden_fields_to_email($contact_form) {
 }
 
 
+
+
+// --- rv_cf7_no_pii_notification ---
+
+/**
+ * Strip all personal data from the admin-bound notification email of every
+ * Sherpa lead form.
+ *
+ * Policy (Dane, 2026-09-02): lead details must not travel by email at all.
+ * The lead itself reaches Sherpa CRM, failures are recoverable from the CRM
+ * Leads screen, and the Sherpa alert emails already carry no contact
+ * details -- so the notification only needs to say that an enquiry arrived
+ * and where it went. Email is the worst channel for lead data: it lands in
+ * mailboxes nobody controls, and FluentSMTP keeps a copy of every message
+ * body in the database for its log window.
+ *
+ * Runs on wpcf7_mail_components, i.e. AFTER the template is composed and
+ * after the wpcf7_before_send_mail mutations above -- so the replacement
+ * also discards the budget-calculator values and chart images that
+ * custom_add_hidden_fields_to_email() appends for form 12311. Sender,
+ * additional headers (Reply-To) and attachments are rebuilt too, because
+ * the composed values of all three can carry the visitor's name, address
+ * or uploaded files.
+ *
+ * The visitor's own confirmation copy (mail_2) is deliberately untouched:
+ * it goes to the person the data belongs to. Form 11060 (newsletter) is not
+ * in the Sherpa config, so its notification -- whose whole purpose is the
+ * subscriber's address -- keeps working.
+ *
+ * @param array             $components subject/sender/body/recipient/
+ *                                      additional_headers/attachments.
+ * @param WPCF7_ContactForm $contact_form Form being mailed.
+ * @param WPCF7_Mail        $mail       Template being composed.
+ * @return array
+ */
+function rv_cf7_no_pii_notification( $components, $contact_form, $mail = null ) {
+	if ( ! is_object( $mail ) || 'mail' !== $mail->name() ) {
+		return $components;
+	}
+
+	if ( ! function_exists( 'rv_sherpa_config' )
+		|| ! array_key_exists( (int) $contact_form->id(), rv_sherpa_config() ) ) {
+		return $components;
+	}
+
+	$community  = '';
+	$submission = class_exists( 'WPCF7_Submission' ) ? WPCF7_Submission::get_instance() : null;
+
+	if ( $submission && class_exists( 'RV_Sherpa_Router' ) ) {
+		$route = RV_Sherpa_Router::resolve( (int) $contact_form->id(), (array) $submission->get_posted_data() );
+
+		if ( null !== $route['community'] ) {
+			$community = RV_Sherpa_Router::community_name( $route['community'] );
+		}
+	}
+
+	$lines = array(
+		'A new enquiry has been received.',
+		'',
+		'Form:     ' . $contact_form->title() . ' (#' . $contact_form->id() . ')',
+	);
+
+	if ( $community ) {
+		$lines[] = 'Village:  ' . $community;
+	}
+
+	$lines[] = 'Received: ' . gmdate( 'Y-m-d H:i' ) . ' UTC';
+	$lines[] = '';
+	$lines[] = 'By policy this notification carries no personal data. The enquiry is';
+	$lines[] = 'delivered to Sherpa CRM; delivery status is tracked in wp-admin:';
+	$lines[] = admin_url( 'admin.php?page=rv-sherpa-leads' );
+
+	$host = (string) wp_parse_url( home_url(), PHP_URL_HOST );
+
+	$components['subject']            = 'New enquiry - ' . ( $community ? $community : $contact_form->title() );
+	$components['body']               = implode( "\n", $lines );
+	$components['sender']             = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES )
+		. ' <wordpress@' . preg_replace( '/^www\./', '', $host ) . '>';
+	$components['additional_headers'] = '';
+	$components['attachments']        = '';
+
+	return $components;
+}
+add_filter( 'wpcf7_mail_components', 'rv_cf7_no_pii_notification', 100, 3 );
