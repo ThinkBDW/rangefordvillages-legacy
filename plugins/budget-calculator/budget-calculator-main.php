@@ -12,8 +12,18 @@ Author URI: https://anotherway.digital/
 defined('ABSPATH') or die('No script kiddies please!');
 
 function enqueue_custom_js() {
+    // These loaded on every page of the site -- html2canvas alone is 198 KB --
+    // for a calculator that appears on a handful of fees pages (AUDIT.md
+    // section 6). Gate to those pages; the function_exists() guard keeps the
+    // plugin working standalone if the theme helper ever disappears.
+    if (function_exists('rv_is_budget_calculator_page') && !rv_is_budget_calculator_page()) {
+        return;
+    }
+
     wp_enqueue_script('custom-script', plugin_dir_url(__FILE__) . 'js/nouislider.min.js', array('jquery'), '1.0', true);
-   wp_enqueue_script('custom-js', plugin_dir_url(__FILE__) . 'js/custom-calculator.js', array('jquery'), time(), true);
+    // time() as the version defeated all caching (AUDIT.md section 6);
+    // filemtime() busts the cache only when the file actually changes.
+    wp_enqueue_script('custom-js', plugin_dir_url(__FILE__) . 'js/custom-calculator.js', array('jquery'), filemtime(plugin_dir_path(__FILE__) . 'js/custom-calculator.js'), true);
     wp_enqueue_style('custom-style', plugin_dir_url(__FILE__) . 'css/nouislider.min.css', array(), '1.0');
     wp_enqueue_script('html2canvas', plugin_dir_url(__FILE__) . 'js/html2canvas.min.js', array(), '1.0');
 

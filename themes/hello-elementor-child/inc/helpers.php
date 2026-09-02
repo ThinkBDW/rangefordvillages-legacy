@@ -70,3 +70,43 @@ function rv_get_village_by_title( $title ) {
 
 	return $posts ? $posts[0] : null;
 }
+
+/**
+ * Whether the queried singular page renders the budget calculator.
+ *
+ * The calculator's assets -- the theme's js/chart.js (200 KB) and the
+ * budget-calculator plugin's html2canvas (198 KB), nouislider and
+ * custom-calculator.js -- were all enqueued site-wide and unconditionally:
+ * ~400 KB of JS on every page of the site for a widget that appears on a
+ * handful of fees pages (AUDIT.md section 6). Both enqueues now gate on this.
+ *
+ * The shortcodes ([budget_calculator] from the theme, and the plugin's
+ * [budget_calculator_custom]) live in plain post_content on some pages and
+ * inside serialised _elementor_data on others, so both stores are checked;
+ * the theme also ships a dedicated Budget Calculator page template.
+ *
+ * @return bool
+ */
+function rv_is_budget_calculator_page() {
+	if ( ! is_singular() ) {
+		return false;
+	}
+
+	if ( is_page_template( 'budget-calculator.php' ) ) {
+		return true;
+	}
+
+	$post = get_post();
+
+	if ( ! $post ) {
+		return false;
+	}
+
+	if ( false !== strpos( $post->post_content, 'budget_calculator' ) ) {
+		return true;
+	}
+
+	$elementor_data = get_post_meta( $post->ID, '_elementor_data', true );
+
+	return is_string( $elementor_data ) && false !== strpos( $elementor_data, 'budget_calculator' );
+}

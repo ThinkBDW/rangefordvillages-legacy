@@ -28,6 +28,9 @@ $rv_includes = array(
 	// defines functions and has no load-time side effects.
 	'helpers',
 	'media',
+	// GTM, recovered at A3 from Elementor Pro Custom Code posts. Holds
+	// rv_legacy_snippets_active(), which inc/enqueue.php also gates on.
+	'analytics',
 	'enqueue',
 	'post-types',
 	'ajax/properties',
