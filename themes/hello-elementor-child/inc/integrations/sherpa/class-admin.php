@@ -6,6 +6,11 @@
  * record of a lead; without a replacement, a lead that failed to reach Sherpa
  * would be invisible and unrecoverable.
  *
+ * It is NOT a lead archive, and the screen says so. Delivered leads show with
+ * their contact columns erased, because that is what the retention policy in
+ * class-store.php does to them the moment Sherpa accepts them. The rows that
+ * still have details are the rows that still need a human.
+ *
  * @package hello-elementor-child
  */
 
@@ -125,6 +130,7 @@ class RV_Sherpa_Admin {
 			array(
 				'id', 'created_at_utc', 'form_id', 'form', 'community', 'name',
 				'email', 'phone', 'status', 'attempts', 'http_status', 'error',
+				'crm_reference', 'redacted_at_utc',
 			)
 		);
 
@@ -144,6 +150,8 @@ class RV_Sherpa_Admin {
 					$row->attempts,
 					$row->http_status,
 					$row->last_error,
+					$row->crm_reference,
+					$row->redacted_at,
 				)
 			);
 		}
@@ -193,6 +201,21 @@ class RV_Sherpa_Admin {
 				. 'but nothing is POSTed to Sherpa. Set <code>RV_SHERPA_DRY_RUN</code> to false in '
 				. 'wp-config.php on production.</p></div>';
 		}
+
+		// Explain the blank columns before anyone reports them as a bug.
+		$windows   = rv_sherpa_retention_days();
+		$holding   = RV_Sherpa_Store::unredacted_count();
+		$fail_days = (int) ( $windows[ RV_Sherpa_Store::STATUS_FAILED ] ?? 0 );
+
+		printf(
+			'<div class="notice notice-info inline"><p><strong>This is a delivery record, not a lead archive.</strong> '
+				. 'A lead\'s contact details are erased as soon as Sherpa accepts it -- Sherpa is the system of '
+				. 'record from that point. Details are kept only for leads that did <em>not</em> arrive, because '
+				. 'those need recovering by hand, and are erased after %d days. '
+				. '<strong>%d</strong> row(s) currently hold personal data.</p></div>',
+			$fail_days,
+			$holding
+		);
 
 		if ( '' === rv_sherpa_token() && ! RV_SHERPA_DRY_RUN ) {
 			echo '<div class="notice notice-error inline"><p><strong>No API token.</strong> '
@@ -270,12 +293,19 @@ class RV_Sherpa_Admin {
 			printf( '<td>%d</td>', (int) $row->id );
 			printf( '<td>%s</td>', esc_html( $row->created_at ) );
 
-			printf(
-				'<td><strong>%s</strong><br><span class="description">%s%s</span></td>',
-				esc_html( $row->contact_name ?: '(no name)' ),
-				esc_html( $row->contact_email ?: '' ),
-				$row->contact_phone ? '<br>' . esc_html( $row->contact_phone ) : ''
-			);
+			if ( ! empty( $row->redacted_at ) ) {
+				printf(
+					'<td><span class="description" title="Erased %s UTC">&mdash; erased &mdash;</span></td>',
+					esc_attr( $row->redacted_at )
+				);
+			} else {
+				printf(
+					'<td><strong>%s</strong><br><span class="description">%s%s</span></td>',
+					esc_html( $row->contact_name ?: '(no name)' ),
+					esc_html( $row->contact_email ?: '' ),
+					$row->contact_phone ? '<br>' . esc_html( $row->contact_phone ) : ''
+				);
+			}
 
 			printf(
 				'<td>%s<br><span class="description">#%d</span></td>',
@@ -299,7 +329,14 @@ class RV_Sherpa_Admin {
 			if ( $row->last_error ) {
 				printf( '<span class="description">%s</span>', esc_html( wp_trim_words( $row->last_error, 20 ) ) );
 			}
-			if ( $is_bad ) {
+			if ( $row->crm_reference ) {
+				printf( '<span class="description">Sherpa ref %s</span>', esc_html( $row->crm_reference ) );
+			}
+			if ( $is_bad && ! empty( $row->redacted_at ) ) {
+				// Nothing left to send -- see RV_Sherpa_Dispatcher::retry().
+				echo '<br><span class="description">Past retention; no longer recoverable here.</span>';
+			}
+			if ( $is_bad && empty( $row->redacted_at ) ) {
 				printf(
 					'<br><a class="button button-small" href="%s">Retry now</a>',
 					esc_url(

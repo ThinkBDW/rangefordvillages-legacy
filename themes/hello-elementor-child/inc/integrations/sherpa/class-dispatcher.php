@@ -11,6 +11,11 @@
  * shows 69 leads in 2026 receiving HTTP 500 and being discarded, spread evenly
  * across every month. A bounded backoff would have recovered most of them.
  *
+ * The mirror image of that ordering is when the data goes away again: a lead
+ * that reaches Sherpa is anonymised in the same request, before this function
+ * returns. Only a lead that did NOT reach Sherpa keeps its personal data, and
+ * only because it is then the sole remaining copy. See class-store.php.
+ *
  * @package hello-elementor-child
  */
 
@@ -84,6 +89,13 @@ class RV_Sherpa_Dispatcher {
 		if ( ! $lead_id ) {
 			// Last resort: if even the insert failed, get the lead into the log
 			// so it is recoverable from the filesystem.
+			//
+			// This is the one place that writes lead data somewhere the
+			// retention policy cannot reach it, and it is a deliberate
+			// exception: the insert failing means this log line is the only
+			// copy of the enquiry that exists anywhere. A lost lead is worse
+			// than a line in debug.log. If it ever fires, the log entry should
+			// be actioned and removed by hand.
 			error_log(
 				sprintf(
 					'[rv-sherpa] FAILED TO STORE LEAD form=%d routing=%s payload=%s',
@@ -183,7 +195,20 @@ class RV_Sherpa_Dispatcher {
 				: RV_Sherpa_Store::STATUS_SENT;
 			$update['next_attempt_at'] = null;
 
+			// Keep the pointer to where the data now lives before erasing our
+			// copy of it. A Sherpa lead ID is not personal data on its own, and
+			// without it an anonymised row cannot be tied back to the CRM record
+			// it produced -- which is the one thing reconciliation needs.
+			$update['crm_reference'] = self::extract_reference( $result['body'] );
+
 			RV_Sherpa_Store::update( $lead_id, $update );
+
+			// The lead is in the CRM. The CRM is the system of record, so this
+			// row has no further reason to hold anybody's contact details.
+			if ( rv_sherpa_anonymise_on_delivery( (int) $lead->form_id ) ) {
+				RV_Sherpa_Store::anonymise( $lead_id );
+			}
+
 			return;
 		}
 
@@ -209,11 +234,53 @@ class RV_Sherpa_Dispatcher {
 	}
 
 	/**
+	 * Pull Sherpa's own identifier for the created lead out of the response.
+	 *
+	 * Sherpa is not consistent about where it puts this -- a create returns the
+	 * new record, a 409 duplicate returns the existing one -- so try the shapes
+	 * that have been observed and give up quietly rather than guessing.
+	 *
+	 * @param string $body Response body.
+	 * @return string Empty string when there is nothing to take.
+	 */
+	private static function extract_reference( $body ) {
+		$decoded = json_decode( (string) $body, true );
+
+		if ( ! is_array( $decoded ) ) {
+			return '';
+		}
+
+		$candidates = array(
+			$decoded['id'] ?? null,
+			$decoded['leadId'] ?? null,
+			$decoded['leadID'] ?? null,
+			$decoded['data']['id'] ?? null,
+			$decoded['data']['leadId'] ?? null,
+			$decoded['lead']['id'] ?? null,
+			$decoded['error']['lead']['id'] ?? null,
+		);
+
+		foreach ( $candidates as $candidate ) {
+			if ( is_scalar( $candidate ) && '' !== (string) $candidate ) {
+				return substr( (string) $candidate, 0, 64 );
+			}
+		}
+
+		return '';
+	}
+
+	/**
 	 * Email on a permanent failure.
 	 *
 	 * Immediate rather than batched: a lost enquiry for a retirement village is
 	 * worth an interruption, and the whole reason the old integration's 500s
 	 * went unnoticed for months is that nothing ever raised its hand.
+	 *
+	 * Deliberately carries no contact details. The point of the retention policy
+	 * is to stop lead data spreading, and email is the worst place for it to go:
+	 * it lands in mailboxes nobody controls, and on this site the email-log
+	 * plugin has been storing every outgoing message in the database -- 7,209 of
+	 * them so far. The alert says which lead, and links to it.
 	 *
 	 * @param object|null $lead Lead row.
 	 */
@@ -250,15 +317,9 @@ class RV_Sherpa_Dispatcher {
 				'Lead ID:    ' . $lead->id,
 				'Form:       ' . $lead->form_title . ' (#' . $lead->form_id . ')',
 				'Community:  ' . RV_Sherpa_Router::community_name( $lead->community_id ),
-				'Contact:    ' . $lead->contact_name,
-				'Email:      ' . ( $lead->contact_email ?: '(none)' ),
-				'Phone:      ' . ( $lead->contact_phone ?: '(none)' ),
 				'',
 				'HTTP status: ' . ( $lead->http_status ?: 'no response' ),
 				'Error:       ' . $lead->last_error,
-				'',
-				'Response:',
-				substr( (string) $lead->response, 0, 1000 ),
 			)
 		);
 
@@ -267,9 +328,16 @@ class RV_Sherpa_Dispatcher {
 
 	/**
 	 * Daily digest, as a backstop for missed individual alerts.
+	 *
+	 * Also runs the retention sweep. The two belong together: the sweep is what
+	 * eventually erases an undelivered lead, and the digest is the warning that
+	 * one is sitting there waiting to be erased. Sweeping first would be wrong
+	 * -- report on the day's failures, then age out the old ones.
 	 */
 	public static function handle_daily_alert() {
 		$failures = RV_Sherpa_Store::recent_failures( 24 );
+
+		self::run_retention_sweep();
 
 		if ( ! $failures ) {
 			return;
@@ -289,13 +357,13 @@ class RV_Sherpa_Dispatcher {
 			'',
 		);
 
+		// No contact details here either -- see alert_failure().
 		foreach ( $failures as $lead ) {
 			$lines[] = sprintf(
-				'#%d  %s  %s  (%s)  HTTP %s',
+				'#%d  %s  %s  HTTP %s',
 				$lead->id,
 				$lead->form_title,
-				$lead->contact_name,
-				$lead->contact_email ?: $lead->contact_phone ?: 'no contact details',
+				RV_Sherpa_Router::community_name( $lead->community_id ),
 				$lead->http_status ?: '-'
 			);
 		}
@@ -312,6 +380,24 @@ class RV_Sherpa_Dispatcher {
 	}
 
 	/**
+	 * Age out personal data that is past its retention window.
+	 *
+	 * @return int Rows anonymised.
+	 */
+	public static function run_retention_sweep() {
+		$done = RV_Sherpa_Store::anonymise_stale( rv_sherpa_retention_days() );
+
+		if ( $done ) {
+			// Worth a line in the log: this is the only record that data was
+			// erased, and "why has that lead gone blank" is a question someone
+			// will eventually ask.
+			error_log( sprintf( '[rv-sherpa] retention sweep anonymised %d lead(s)', $done ) );
+		}
+
+		return $done;
+	}
+
+	/**
 	 * Requeue a lead from the admin screen.
 	 *
 	 * @param int $lead_id Lead ID.
@@ -321,6 +407,12 @@ class RV_Sherpa_Dispatcher {
 		$lead = RV_Sherpa_Store::get( $lead_id );
 
 		if ( ! $lead ) {
+			return false;
+		}
+
+		// An anonymised lead has no payload left to send. Retrying it would
+		// POST nothing and then mark itself failed a second time.
+		if ( ! empty( $lead->redacted_at ) ) {
 			return false;
 		}
 

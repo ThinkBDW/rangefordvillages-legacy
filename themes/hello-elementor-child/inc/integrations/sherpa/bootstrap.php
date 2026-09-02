@@ -43,8 +43,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/** Schema version for the lead store; bump to trigger a table upgrade. */
-define( 'RV_SHERPA_DB_VERSION', '1.0.0' );
+/**
+ * Schema version for the lead store; bump to trigger a table upgrade.
+ *
+ * 1.1.0 adds crm_reference and redacted_at for the retention policy in
+ * class-store.php.
+ */
+define( 'RV_SHERPA_DB_VERSION', '1.1.0' );
 
 /** Sherpa company ID. Constant across all six communities. */
 define( 'RV_SHERPA_COMPANY_ID', 27 );
@@ -134,6 +139,52 @@ function rv_sherpa_token() {
 	 * @param string $token Token, or empty string.
 	 */
 	return (string) apply_filters( 'rv_sherpa_token', $env ? (string) $env : '' );
+}
+
+/**
+ * How long each terminal status may keep its personal data, in days.
+ *
+ * Delivered leads are not in this list because they are not swept -- they are
+ * anonymised in the same request that delivered them (see
+ * RV_Sherpa_Dispatcher::handle_send()). What is here is everything that has a
+ * reason to hold data for a while longer:
+ *
+ *   failed    90 days. This is the only remaining copy of the enquiry, and
+ *             recovering it is a manual job someone has to get round to. Ninety
+ *             days is generous on purpose; a lead nobody has actioned in three
+ *             months is not going to be actioned.
+ *   dry-run    7 days. Dry run exists to verify mapping before cutover, which
+ *             needs the payload -- but only briefly, and never for long enough
+ *             to matter if dry run is ever left on somewhere real.
+ *   skipped    7 days. Same reasoning.
+ *
+ * Set a value to -1 to keep indefinitely. Nothing does, by design.
+ *
+ * @return array status => days.
+ */
+function rv_sherpa_retention_days() {
+	return apply_filters(
+		'rv_sherpa_retention_days',
+		array(
+			RV_Sherpa_Store::STATUS_FAILED  => 90,
+			RV_Sherpa_Store::STATUS_DRY_RUN => 7,
+			RV_Sherpa_Store::STATUS_SKIPPED => 7,
+		)
+	);
+}
+
+/**
+ * Whether a delivered lead has its personal data erased on the spot.
+ *
+ * Filterable only so that a cutover reconciliation run can hold data long
+ * enough to compare the new integration's output against the outgoing plugin's.
+ * It should be true everywhere else, and it is true by default.
+ *
+ * @param int $form_id CF7 form ID.
+ * @return bool
+ */
+function rv_sherpa_anonymise_on_delivery( $form_id = 0 ) {
+	return (bool) apply_filters( 'rv_sherpa_anonymise_on_delivery', true, $form_id );
 }
 
 /**
