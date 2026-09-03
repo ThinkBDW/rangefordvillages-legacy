@@ -36,19 +36,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 // Village dropdown value => community. Used by the brochure and contact forms
-// that let the visitor choose. Ported from functions.php:3461-3492.
+// that let the visitor choose. Ported from functions.php:3461-3492; the map
+// itself now lives in rv_sherpa_village_communities() (bootstrap.php), because
+// the page-context resolver needs the same list.
+//
+// The default is Homewood Grove, inherited. It applies when the dropdown is
+// absent, empty or carries something unmapped -- see form 637 below, which has
+// no dropdown at all.
 $rv_by_village = array(
 	'by_field' => 'your-field-name',
-	'values'   => array(
-		'Wadswick Green'              => 1,
-		'Mickle Hill'                 => 2,
-		'Siddington Park'             => 3,
-		'Homewood Grove'              => 4,
-		'Strawberry Fields'           => 5,
-		'Bramston Park, Hampshire'    => 6,
-		'East Grinstead, West Sussex' => 6,
-		'Elstree, Hertfordshire'      => 6,
-	),
+	'values'   => rv_sherpa_village_communities(),
 	'default'  => 4,
 );
 
@@ -189,7 +186,7 @@ return array(
 			'residentContactLastName'            => 'residentContactLastName',
 			'primaryContactResidentRelationship' => 'primaryContactResidentRelationship',
 		),
-		'note'      => 'Homepage contact form. Village routing was broken (dead connector 17934).',
+		'note'      => 'General contact form, on ~20 pages. No village field of its own: the village is filled from the page (rv_cf7_fill_village_from_context). Routing was also broken (dead connector 17934).',
 	),
 
 	// --- Per-village contact forms: community is fixed --------------------
@@ -200,11 +197,26 @@ return array(
 	23633 => array( 'community' => 4, 'map' => $rv_village_form_map, 'note' => 'Homewood Grove contact form.' ),
 	23430 => array( 'community' => 5, 'map' => $rv_village_form_map, 'note' => 'Strawberry Fields contact form.' ),
 
-	// was connector 23425 -- no referralNote field on this one.
+	/*
+	 * was connector 23425 -- no referralNote field on this one.
+	 *
+	 * The community was fixed at 6, but this form DOES render the village
+	 * dropdown, and on /future-villages/ that dropdown offers all eight
+	 * villages (dynamic_village_field_values only narrows to future villages
+	 * on the 'coming-soon' page). So a visitor who picked 'Wadswick Green'
+	 * here had their choice silently discarded and their enquiry sent to
+	 * Rangeford Future Villages. It now routes on the choice, and falls back
+	 * to 6 rather than the shared default of 4 -- an unanswered dropdown on
+	 * the Future Villages page means Future Villages.
+	 */
 	23421 => array(
-		'community' => 6,
+		'community' => array(
+			'by_field' => 'your-field-name',
+			'values'   => rv_sherpa_village_communities(),
+			'default'  => 6,
+		),
 		'map'       => array_diff_key( $rv_village_form_map, array( 'textarea-256' => '' ) ),
-		'note'      => 'Future Villages contact form.',
+		'note'      => 'Future Villages contact form. Routes on the village dropdown, defaulting to Future Villages.',
 	),
 
 	// was connector 25907

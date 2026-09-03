@@ -122,6 +122,98 @@ function add_referral_datetime($posted_data) {
     return $posted_data;
 }
 
+/**
+ * Fill the village field from the page, when the submission carries none.
+ *
+ * Form 637 is the general contact form and sits on roughly twenty pages,
+ * including all five village pages, 'Homewood Grove - Care' and six
+ * 'FEES & CHARGES' pages. It declares no village form-tag at all, so
+ * 'your-field-name' was never posted and every one of its leads took the
+ * routing default -- community 4, Homewood Grove -- whichever village the
+ * visitor happened to be reading about. Its notification recipient fell through
+ * the same way: wpcf7_custom_email_recipient() in mail.php lists form 637 among
+ * the forms it routes by 'your-field-name', looks the field up, finds nothing,
+ * and logs "Email mapping not found for form 637 value: N/A" on every
+ * submission.
+ *
+ * js/custom.js tried to fix this in the browser and could not: it looks for the
+ * field only inside '#wpcf7-f637-p20184-o3', and its slug table keys on
+ * 'east-grinstead-west-sussex' and 'homewood-grove-care' -- neither a current
+ * slug, and the latter not a community anyway. Doing it here instead means it
+ * works with JavaScript disabled, works for the fees pages the JS never
+ * covered, and cannot drift when a village is renamed, because the village
+ * titles come from the villages posts themselves.
+ *
+ * Deliberately narrow, on two counts. A value the visitor actually chose is
+ * never overwritten, so the forms that carry the real dropdown are unaffected.
+ * And it only touches forms whose Sherpa routing is actually keyed on
+ * 'your-field-name': the budget calculator routes on 'page-id' and the event
+ * form on 'venue-title', and injecting a field they do not use would be noise
+ * today and a trap later, since mail.php picks its recipient from the FIRST of
+ * these fields it finds.
+ *
+ * Runs on wpcf7_posted_data, so both the CRM routing (RV_Sherpa_Router) and the
+ * recipient mapping (mail.php) see it -- they both read
+ * WPCF7_Submission::get_posted_data().
+ *
+ * @param array $posted_data CF7 posted data.
+ * @return array
+ */
+function rv_cf7_fill_village_from_context( $posted_data ) {
+	if ( ! function_exists( 'rv_sherpa_village_for_post' ) ) {
+		return $posted_data;
+	}
+
+	$existing = $posted_data['your-field-name'] ?? '';
+
+	if ( is_array( $existing ) ) {
+		$existing = reset( $existing );
+	}
+
+	if ( '' !== trim( (string) $existing ) ) {
+		return $posted_data;
+	}
+
+	$submission = WPCF7_Submission::get_instance();
+
+	if ( ! $submission ) {
+		return $posted_data;
+	}
+
+	$form = $submission->get_contact_form();
+
+	if ( ! $form ) {
+		return $posted_data;
+	}
+
+	// Only forms routed on this field.
+	$config    = rv_sherpa_config();
+	$community = $config[ $form->id() ]['community'] ?? null;
+
+	if ( ! is_array( $community ) || 'your-field-name' !== ( $community['by_field'] ?? '' ) ) {
+		return $posted_data;
+	}
+
+	// CF7 records the post the form was rendered in as submission meta; it is
+	// not part of the posted data, because CF7 strips its own _wpcf7* keys.
+	$container = (int) $submission->get_meta( 'container_post_id' );
+
+	if ( ! $container ) {
+		return $posted_data;
+	}
+
+	$village = rv_sherpa_village_for_post( $container );
+
+	if ( '' === $village ) {
+		return $posted_data;
+	}
+
+	$posted_data['your-field-name'] = $village;
+
+	return $posted_data;
+}
+add_filter( 'wpcf7_posted_data', 'rv_cf7_fill_village_from_context' );
+
 function add_hidden_page_id_script() {
     ?>
     <script type="text/javascript">

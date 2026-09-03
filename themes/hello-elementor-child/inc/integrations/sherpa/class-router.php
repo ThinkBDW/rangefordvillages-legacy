@@ -142,13 +142,17 @@ class RV_Sherpa_Router {
 	 * @return string
 	 */
 	public static function community_name( $community ) {
+		// Verbatim from GET /companies/27/communities (checked 2026-09-02), so
+		// the admin screen and the notification emails call each community
+		// what the CRM calls it. Community 6 is 'Rangeford Future Villages'
+		// there, not 'Future Villages'.
 		$names = array(
 			1 => 'Wadswick Green',
 			2 => 'Mickle Hill',
 			3 => 'Siddington Park',
 			4 => 'Homewood Grove',
 			5 => 'Strawberry Fields',
-			6 => 'Future Villages',
+			6 => 'Rangeford Future Villages',
 		);
 
 		return $names[ (int) $community ] ?? sprintf( 'Community %d', (int) $community );

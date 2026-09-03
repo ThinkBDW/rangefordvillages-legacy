@@ -91,12 +91,37 @@ class RV_Sherpa_Mapper {
 			}
 		}
 
-		// Attribution defaults, per the integration guide's "Company Website".
+		/*
+		 * Source attribution, set rather than defaulted.
+		 *
+		 * Sherpa validates the (sourceCategory, sourceName) pair against the
+		 * inquiry sources configured for the community, and raises an alert on
+		 * every lead whose pair does not match one. The posted values could not
+		 * be trusted to produce a matching pair: the form definitions default
+		 * sourceName to 'Internet' and leave sourceCategory empty, while a
+		 * wp_footer script overwrote both from ACF options and then let the
+		 * "how did you hear about us" dropdown put any of its eleven answers
+		 * into sourceCategory. Which values Sherpa received therefore depended
+		 * on whether JavaScript had run.
+		 *
+		 * So they are assigned here from one authority, the same treatment
+		 * referralDateTime gets above. See rv_sherpa_source_fields().
+		 */
+		$sources = rv_sherpa_source_fields();
+
 		foreach ( array( 'vendorName', 'sourceCategory', 'sourceName' ) as $field ) {
-			if ( '' === $payload[ $field ] ) {
-				$payload[ $field ] = 'Company Website';
-				$warnings[]        = "{$field} was empty; defaulted to 'Company Website'";
+			$posted = $payload[ $field ] ?? '';
+
+			if ( '' !== $posted && $posted !== $sources[ $field ] ) {
+				$warnings[] = sprintf(
+					"%s was posted as '%s'; sent as '%s'",
+					$field,
+					$posted,
+					$sources[ $field ]
+				);
 			}
+
+			$payload[ $field ] = $sources[ $field ];
 		}
 
 		if ( '' === $payload['primaryContactFirstName'] && '' === $payload['primaryContactLastName'] ) {
