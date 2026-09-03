@@ -359,7 +359,7 @@
 .contact-form select {
     /* Shorthand, so it must restate the background colour or the field goes
      * transparent against the page. */
-    background: #fff url(img/down-arrow.svg) no-repeat;
+    background: #fff url(/wp-content/themes/hello-elementor-child/img/down-arrow.svg) no-repeat;
     background-position-x: calc(100% - 18px);
     background-position-y: center;
     padding-right: 46px;
@@ -642,7 +642,7 @@
     font-size: 15px !important;
     width: 168px;
     border-radius: 50px;
-    background: url(img/down-arrow.svg) no-repeat;
+    background: url(/wp-content/themes/hello-elementor-child/img/down-arrow.svg) no-repeat;
     background-position-x: calc(100% - 17px);
     background-position-y: center;
     -webkit-appearance: none;
@@ -2173,7 +2173,7 @@
 
 /* .max-mega-menu-parent .custom-html-widget::after {
     content: '';
-    background: url(img/r-white.png) no-repeat center;
+    background: url(/wp-content/themes/hello-elementor-child/img/r-white.png) no-repeat center;
     position: absolute;
     top: 0;
     right: 0%;
@@ -2922,7 +2922,7 @@
 
 .feature-list li:before {
     content: '';
-    background: url(img/mark.png) no-repeat center;
+    background: url(/wp-content/themes/hello-elementor-child/img/mark.png) no-repeat center;
     background-color: #F1F0E9;
     border-radius: 50%;
     height: 35px;
@@ -3731,7 +3731,7 @@ a.back-btn.parent-page-gallery {
     font-size: 15px !important;
     width: 168px;
     border-radius: 10px;
-    background: url(img/down-arrow.svg) no-repeat;
+    background: url(/wp-content/themes/hello-elementor-child/img/down-arrow.svg) no-repeat;
     background-position-x: calc(100% - 17px);
     background-position-y: center;
     -webkit-appearance: none;
@@ -4448,7 +4448,7 @@ a.back-btn.parent-page-gallery {
 }
 
 .budget-calculator .form-section select.wpcf7-form-control {
-    background-image: url(img/down-arrow.svg);
+    background-image: url(/wp-content/themes/hello-elementor-child/img/down-arrow.svg);
     background-repeat: no-repeat;
     background-position: calc(100% - 18px) center;
     padding-right: 46px;

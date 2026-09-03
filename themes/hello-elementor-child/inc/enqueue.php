@@ -26,7 +26,7 @@ add_filter('locale_stylesheet_uri', 'chld_thm_cfg_locale_css');
 if (!function_exists('child_theme_configurator_css')) :
     function child_theme_configurator_css()
     {
-        wp_enqueue_style('chld_thm_cfg_child', trailingslashit(get_stylesheet_directory_uri()) . 'style.css', array('hello-elementor', 'hello-elementor-theme-style'));
+        wp_enqueue_style('chld_thm_cfg_child', trailingslashit(get_stylesheet_directory_uri()) . 'style.css', array('hello-elementor', 'hello-elementor-theme-style'), filemtime(get_stylesheet_directory() . '/style.css'));
     }
 endif;
 add_action('wp_enqueue_scripts', 'child_theme_configurator_css', 10);
@@ -50,7 +50,12 @@ function enqueue_custom_scripts()
     if (rv_is_budget_calculator_page()) {
         wp_enqueue_script('chart-js', get_stylesheet_directory_uri() . '/js/chart.js', array('jquery'), '1.0', true);
     }
-    wp_enqueue_style('new-css', get_stylesheet_directory_uri() . '/new-style.css', array('hello-elementor', 'hello-elementor-theme-style'));
+    // filemtime, so an edit to this file actually invalidates what is cached.
+    // Without a version WordPress stamps ?ver=<WP version>, which does not
+    // change when the stylesheet does -- so SiteGround Optimizer keeps serving
+    // the combined CSS it built from the previous copy and a deploy looks like
+    // it did nothing. Same reasoning as custom-new.js above.
+    wp_enqueue_style('new-css', get_stylesheet_directory_uri() . '/new-style.css', array('hello-elementor', 'hello-elementor-theme-style'), filemtime(get_stylesheet_directory() . '/new-style.css'));
     wp_enqueue_style('paladin-css', get_stylesheet_directory_uri() . '/css/paladin.css');
 
 
