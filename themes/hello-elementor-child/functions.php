@@ -4,14 +4,15 @@
  *
  * A loader only -- the code lives in inc/.
  *
- * The include order matters in two places:
+ * The include order matters in one place: the two library/ requires may define
+ * helpers used by the code between them, so they keep their positions.
  *
- *   - inc/wishlist.php calls session_start() at include time, so it must stay
- *     after the enqueue and post-type registrations, as it was before.
- *   - the two library/ requires may define helpers used by the code
- *     between them, so they keep their positions.
+ * inc/wishlist.php used to call session_start() at include time, which pinned
+ * it after the enqueue and post-type registrations. The session is gone
+ * (2026-09-02 -- see rv_wishlist_ids_from_request()), so that constraint no
+ * longer applies, but the position is left alone rather than churned.
  *
- * Do not reorder without checking both.
+ * Do not reorder without checking.
  *
  * @package hello-elementor-child
  */
@@ -51,7 +52,15 @@ $rv_includes = array(
 	'cf7/spam',
 	'shortcodes/budget-calculator',
 	'brochure-modal',
-	'integrations/sherpa/legacy-source-fields',
+	// Removed 2026-09-02: 'integrations/sherpa/legacy-source-fields'. It was a
+	// wp_footer script that overwrote vendorName / sourceCategory / sourceName
+	// from ACF options and then let the "how did you hear about us" dropdown
+	// overwrite sourceCategory again, so the source attribution Sherpa received
+	// depended on whether JavaScript ran -- and could be any of eleven
+	// categories, most of which are not configured inquiry sources in the CRM.
+	// Every lead came in with a source-mismatch alert. The three values are now
+	// set server-side in rv_sherpa_source_fields().
+	//
 	// The only lead delivery path. RV_SHERPA_DRY_RUN gates real POSTs.
 	'integrations/sherpa/bootstrap',
 	'shortcodes/maps',

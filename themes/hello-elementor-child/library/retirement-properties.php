@@ -141,8 +141,6 @@ function sort_and_paginate_properties()
     $posts_per_page = 15; // Adjust the number of posts per page as needed
     $hide_reserved = isset($_POST['hide_reserved']) ? $_POST['hide_reserved'] : 'false'; // Default to false
     $saved_properties = isset($_POST['saved_properties']) ? $_POST['saved_properties'] : 'false';
-    // Retrieve the 'saved' parameter value from the AJAX request
-    $savedPropertyValue = isset($_POST['savedPropertyValue']) ? sanitize_text_field($_POST['savedPropertyValue']) : '';
     $sort_value = isset($_POST['sort_value']) ? sanitize_text_field($_POST['sort_value']) : '';
 	$minrangePrice = isset($_POST['minrangePrice']) ? floatval($_POST['minrangePrice']) : 0;
 	$maxrangePrice = isset($_POST['maxrangePrice']) ? floatval($_POST['maxrangePrice']) : 0;
@@ -321,26 +319,16 @@ function sort_and_paginate_properties()
             'operator' => 'IN',
         );
     }
-    // Add filter condition for showing only saved properties
+    // Add filter condition for showing only saved properties.
+    //
+    // The list arrives in the request rather than out of $_SESSION -- see
+    // rv_wishlist_ids_from_request() in inc/wishlist.php for why the session
+    // copy had to go. A second, near-identical block used to sit here keyed on
+    // $_POST['savedPropertyValue'], which js/custom.js has never sent; it was
+    // dead code, and it was why the header's "Saved Properties" link returned
+    // every home instead of only the saved ones.
     if ($saved_properties === 'true') {
-        //$wishlist = getWishlistFromLocalStorage();
-        $wishlist = $_SESSION['wishlist'];
-        if (!empty($wishlist)) {
-            $args['post__in'] = $wishlist;
-            // Set orderby to ensure price sorting works
-            $args['orderby'] = array(
-                'meta_value' => ($_POST['sort_value'] == 'low_to_high') ? 'ASC' : 'DESC',
-                'post__in' => 'ASC',
-            );
-            $args['meta_key'] = 'price';
-        } else {
-            // No wishlist items, don't display any posts
-            $args['post__in'] = array(0);
-        }
-    }
-    // Add filter condition for showing only saved properties if requested
-    if ($saved_properties === 'false' && $savedPropertyValue === 'property') {
-        $wishlist = $_SESSION['wishlist'];
+        $wishlist = rv_wishlist_ids_from_request();
         if (!empty($wishlist)) {
             $args['post__in'] = $wishlist;
             // Set orderby to ensure price sorting works
@@ -482,7 +470,7 @@ function sort_and_paginate_properties()
                             <img class="without-fill" src="/wp-content/uploads/2024/05/save-property-line-icon-1.svg">
                             <img style="display:none;" class="fill-whish-list" src="/wp-content/uploads/2024/05/save-property-line-icon-fill-1.svg" alt="Wishlist"> 
                             <span class="wishlist-text without-fill">Save Property</span>
-                            <span style="display:none;" class="fill-whish-list" class="wishlist-text">Remove Property</span>
+                            <span style="display:none;" class="fill-whish-list wishlist-text">Remove Property</span>
                         </div>
                         
                     </div>

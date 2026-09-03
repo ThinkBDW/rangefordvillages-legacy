@@ -231,7 +231,7 @@ function load_more_properties()
                         <img class="without-fill" src="/wp-content/uploads/2024/05/save-property-line-icon-1.svg">
                         <img style="display:none;" class="fill-whish-list" src="/wp-content/uploads/2024/05/save-property-line-icon-fill-1.svg" alt="Wishlist">
                         <span class="wishlist-text without-fill">Save Property</span>
-                        <span style="display:none;" class="fill-whish-list" class="wishlist-text">Remove Property</span>
+                        <span style="display:none;" class="fill-whish-list wishlist-text">Remove Property</span>
                     </div>
                 </div>
 

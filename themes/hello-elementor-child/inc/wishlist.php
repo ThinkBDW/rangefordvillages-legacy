@@ -1,6 +1,6 @@
 <?php
 /**
- * Property wishlist (session-backed)
+ * Property wishlist ("Save Property")
  *
  * @package hello-elementor-child
  */
@@ -9,46 +9,49 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// --- session bootstrap, handle_wishlist, whishlist_count ---
+// --- rv_wishlist_ids_from_request(), [whishlist_count] ---
 
-// Start session if not already started
-if (!session_id()) {
-    session_start();
+/**
+ * Read the visitor's wishlist out of the current AJAX request.
+ *
+ * The wishlist lives in the browser, in localStorage under "wishlistData".
+ *
+ * It used to live in two places at once. js/custom.js wrote localStorage to
+ * drive the filled/unfilled "Save Property" icons, while handle_wishlist()
+ * kept a parallel copy in $_SESSION that the header count and the "Saved
+ * Properties" filter read from. The two copies had different lifetimes --
+ * localStorage three months, the PHP session only until the browser closed or
+ * session.gc_maxlifetime (24 minutes by default) collected it -- so they drifted
+ * apart routinely. Reproduced 2026-09-02: drop PHPSESSID and the card still
+ * reads "Remove Property" while the header count reads 0 and the Saved
+ * Properties filter returns nothing.
+ *
+ * localStorage is the copy that actually survives, so it is now the only one.
+ * The count is rendered client-side and the filter takes the list in the
+ * request. Removing the session also removes a Set-Cookie: PHPSESSID from every
+ * front-end response, and a per-visitor number out of server-rendered HTML --
+ * both of which would have made the site uncacheable on SiteGround, or worse,
+ * shown one visitor another's count out of the page cache.
+ *
+ * @return int[] Property IDs, deduplicated. Empty if none were sent.
+ */
+function rv_wishlist_ids_from_request() {
+	if ( empty( $_POST['wishlist'] ) || ! is_array( $_POST['wishlist'] ) ) {
+		return array();
+	}
+
+	$ids = array_map( 'absint', wp_unslash( $_POST['wishlist'] ) );
+
+	return array_values( array_unique( array_filter( $ids ) ) );
 }
-
-// Function to handle adding/removing properties to/from the wishlist
-function handle_wishlist()
-{
-    $property_id = isset($_POST['property_id']) ? $_POST['property_id'] : 0;
-    $wishlist = isset($_SESSION['wishlist']) ? $_SESSION['wishlist'] : array();
-
-    // Toggle property in the wishlist
-    if (in_array($property_id, $wishlist)) {
-        $wishlist = array_diff($wishlist, array($property_id));
-    } else {
-        $wishlist[] = $property_id;
-    }
-
-    $_SESSION['wishlist'] = $wishlist;
-
-    // Return updated wishlist count
-    echo count($wishlist);
-
-    wp_die(); // Always include this line to terminate immediately and return a proper response
-}
-
-add_action('wp_ajax_handle_wishlist', 'handle_wishlist');
-add_action('wp_ajax_nopriv_handle_wishlist', 'handle_wishlist');
 
 /*Whishlist count shortcode  */
+// Renders 0; js/custom.js fills it in from localStorage on DOM ready. The
+// number cannot be rendered here any more -- see rv_wishlist_ids_from_request().
 add_shortcode("whishlist_count", "whishlist_count_number");
 function whishlist_count_number()
 { ?>
     <div class="wishlist-count-container">
-        <span style="color:#fff;" class="wishlist-count">
-            <?php echo isset($_SESSION['wishlist']) ? count($_SESSION['wishlist']) : 0; ?>
-        </span>
+        <span style="color:#fff;" class="wishlist-count">0</span>
     </div>
 <?php }
-
-

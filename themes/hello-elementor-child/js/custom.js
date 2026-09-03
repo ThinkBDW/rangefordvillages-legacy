@@ -21,9 +21,7 @@ jQuery(document).ready(function ($) {
             const villagePath = path.split('/villages/')[1].replace(/\/$/, '');
             if (villageMap[villagePath]) {
                 villageHidden.val(villageMap[villagePath]);
-                console.log("Hidden village field set to: " + villageMap[villagePath]);
             } else {
-                console.log("No mapping found for: " + villagePath);
             }
         }
     }
@@ -70,7 +68,6 @@ jQuery(document).ready(function ($) {
     
 // Get the current page URL
 var postIdBrochure = localStorage.getItem('post_id_brochure_id'); // Get the stored ID
-    console.log('Brochure ID: ' + postIdBrochure);
 if (postIdBrochure) {
     // Create a hidden field and set its value
     var hiddenField = $('<input>').attr({
@@ -162,8 +159,6 @@ if (postIdBrochure) {
     });
 
     $(".slider-popup-image:not(.property-slider-popup-image)").on('afterChange', function(event, slick, currentSlide){
-        console.log(jQuery(".property-slider-thumbs .slick-slide"));
-        console.log(jQuery(".property-slider-thumbs .slick-slide").eq(currentSlide))
         jQuery(".property-slider-thumbs .slick-slide").removeClass('slick-current');
         jQuery(".property-slider-thumbs .slick-slide[data-slick-index='" + currentSlide + "']").addClass('slick-current'); 
     });
@@ -189,7 +184,6 @@ if (postIdBrochure) {
       // Show the lightbox when the button is clicked
       $('.masonry-gallery .light-box-btn, .second-image, .gallery-images .elementor-image-gallery .gallery-item img,.gallery-images .gallery-item .gallery-child-images img').on('click', function(){
         var index = $(this).index('.gallery-child-images img');
-        console.log(index);
         // Set the slider to show the clicked image first
         $(".slider-popup-image").slick('slickGoTo', index);
     
@@ -371,7 +365,13 @@ if (postIdBrochure) {
             maxBed = urlParams.get('max_bed') || '';
             condition = urlParams.get('condition') || '';
             hideReserved = urlParams.get('hide_reserved') === 'true';
-            savedproperties = urlParams.get('saved_properties') === 'true';
+            // ?saved=property is what the header's "Saved Properties" menu item
+            // linked to. Nothing ever read it, so the link showed every home.
+            // The menu URL now says saved_properties=true, but old bookmarks
+            // and any link already out in an email still arrive on the legacy
+            // form, so both are honoured.
+            savedproperties = urlParams.get('saved_properties') === 'true' ||
+                urlParams.get('saved') === 'property';
             selectedAmenities = urlParams.getAll('amenities');
     
             // Pre-fill form inputs
@@ -440,7 +440,10 @@ if (postIdBrochure) {
             hide_reserved: hideReserved,
             saved_properties: savedproperties,
             amenities: selectedAmenities,
-            page: page
+            page: page,
+            // The server has no copy of the wishlist to consult any more --
+            // inc/wishlist.php explains why the $_SESSION one was removed.
+            wishlist: getWishlistFromLocalStorage()
         };
     
         $('.loader').show();
@@ -457,6 +460,7 @@ if (postIdBrochure) {
                 }, 400);
                 initSlick();
                 updateWishlistIcons();
+                renderWishlistCount();
             },
             error: function () {
                 $('.loader').hide();
@@ -475,28 +479,17 @@ if (postIdBrochure) {
         var $wishlistIcon = $(this);
         var propertyId = $wishlistIcon.data('property-id');
 
-        // Toggle between wishlist icons
-        $wishlistIcon.find('.without-fill, .fill-whish-list').toggle();
-
-        // Update wishlist state in Local Storage
+        // Update wishlist state in Local Storage, then paint every icon for
+        // this property from what storage now says. Painting from storage
+        // rather than toggling in place keeps the single-property icon and the
+        // matching card in a carousel from disagreeing.
         updateLocalStorage(propertyId);
+        applyWishlistState(propertyId);
 
-        // Ajax call to handle_wishlist
-        $.ajax({
-            type: 'POST',
-            url: ajaxurl,
-            data: {
-                action: 'handle_wishlist',
-                property_id: propertyId,
-            },
-            success: function (response) {
-                // Update the wishlist count in the header
-                $('.wishlist-count').text(response);
-            },
-            error: function () {
-                // Handle error if needed
-            }
-        });
+        // No AJAX round-trip: the wishlist is a browser-side list now, so the
+        // count is ours to render. The handle_wishlist endpoint that used to
+        // mirror it into $_SESSION is gone -- see inc/wishlist.php.
+        renderWishlistCount();
     });
 
     // Pagination click event
@@ -541,31 +534,50 @@ if (postIdBrochure) {
         loadProperties(1, true);
     }
     updateWishlistIcons();
+    renderWishlistCount();
 
      // Update wishlist icons on initial load
 
 
+    // Paint one icon to match storage. Both of these used to call .toggle(),
+    // which flips whatever is there rather than setting it -- so a second call
+    // (an AJAX re-render, a slick clone) silently inverted the icon and left it
+    // claiming the opposite of the truth.
+    function paintWishlistIcon($icon, isSaved) {
+        $icon.find('.without-fill').toggle(!isSaved);
+        $icon.find('.fill-whish-list').toggle(isSaved);
+    }
+
+    // Every icon for one property, wherever it appears on the page.
+    function applyWishlistState(propertyId) {
+        var isSaved = getWishlistFromLocalStorage().includes(propertyId);
+        $('.wishlist-icon-section, .wishlist-icon-section-single').each(function () {
+            if ($(this).data('property-id') === propertyId) {
+                paintWishlistIcon($(this), isSaved);
+            }
+        });
+    }
+
     // Function to update wishlist icons based on Local Storage
     function updateWishlistIcons() {
+        var wishlist = getWishlistFromLocalStorage();
         $('.wishlist-icon-section').each(function () {
-            var propertyId = $(this).data('property-id');
-            var wishlist = getWishlistFromLocalStorage();
-            if (wishlist.includes(propertyId)) {
-                $(this).find('.without-fill, .fill-whish-list').toggle();
-            }
+            paintWishlistIcon($(this), wishlist.includes($(this).data('property-id')));
         });
     }
 
 
     function updateWishlistIconssingle() {
-        var wishlistIcon = $('.wishlist-icon-section-single');
-        var propertyId = wishlistIcon.data('property-id');
         var wishlist = getWishlistFromLocalStorage();
-        if (wishlist.includes(propertyId)) {
-            wishlistIcon.find('.without-fill, .fill-whish-list').toggle();
-            
-        }
-       
+        $('.wishlist-icon-section-single').each(function () {
+            paintWishlistIcon($(this), wishlist.includes($(this).data('property-id')));
+        });
+    }
+
+    // The header count. Rendered here, not by the [whishlist_count] shortcode,
+    // because the browser is the only thing that knows the wishlist now.
+    function renderWishlistCount() {
+        $('.wishlist-count').text(getWishlistFromLocalStorage().length);
     }
     
     // Add change event listener for "Select villages" dropdown
@@ -934,7 +946,6 @@ jQuery(document).ready(function($) {
                 village_name: villageName
             },
             success: function(response) {
-                console.log('AJAX Response:', response);
 
                 if (response.success && response.data) {
 
@@ -943,12 +954,10 @@ jQuery(document).ready(function($) {
                     // --- Update thank-you URL hidden field ---
                     if (url) {
                         $('.villages-thank-url').val(url);
-                        console.log('Updated thank-you URL:', url);
                     }
 
                     // --- Update brochure ID localStorage + hidden field ---
                     if (term_id) {
-                        console.log('Updated brochure ID:', term_id);
 
                         // Save to localStorage for later use on brochure page
                         localStorage.setItem('post_id_brochure_id', term_id);
@@ -983,7 +992,6 @@ jQuery(document).ready(function($) {
     // --- On page load, restore hidden input from localStorage if it exists ---
     const storedBrochureId = localStorage.getItem('post_id_brochure_id');
     if (storedBrochureId) {
-        console.log('Restored brochure ID from storage:', storedBrochureId);
 
         let hiddenField = $('input[name="post_id_brochure_id"]');
         if (!hiddenField.length) {

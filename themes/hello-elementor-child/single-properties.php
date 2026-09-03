@@ -85,7 +85,7 @@ while (have_posts()):
                                                         <img style="display:none;" class="fill-whish-list"
                                                             src="/wp-content/uploads/2023/12/Vector-1.png" alt="Wishlist">
                                                             <span class="wishlist-text without-fill">Save Property</span>
-                                                            <span style="display:none;" class="fill-whish-list" class="wishlist-text">Remove Property</span>
+                                                            <span style="display:none;" class="fill-whish-list wishlist-text">Remove Property</span>
                                                     </div>
                                                     
                                                     
@@ -649,7 +649,6 @@ endwhile;
 ?>
 <script>
     jQuery(window).on('load', function(){
-        console.log('SLIDER');
         jQuery(".property-slider-popup-image").slick({
             // Slick slider settings go here
             slidesToShow: 1,
