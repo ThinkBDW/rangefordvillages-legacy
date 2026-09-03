@@ -115,3 +115,102 @@ function rv_is_budget_calculator_page() {
 
 	return is_string( $elementor_data ) && false !== strpos( $elementor_data, 'budget_calculator' );
 }
+
+// --- rv_google_maps_api_key() ---
+
+/**
+ * The Google Maps browser key, from one place.
+ *
+ * The key used to be hard-coded in inc/enqueue.php AND stored separately in
+ * the elementor_google_maps_api_key option, so the theme map and Elementor's
+ * own map widget could drift apart. Worse, replacing it meant a code deploy.
+ *
+ * Anotherway's key (AIzaSyAFKJ4-...) sits on a Google Cloud project with
+ * billing switched off, which is why the map renders as a blank grey box:
+ * the JS API loads, refuses to serve tiles and falls back to a static image.
+ * The Geocoding API on the same key answers REQUEST_DENIED, "You must enable
+ * Billing on the Google Cloud Project". No amount of code fixes that -- the
+ * site needs a key on a billed project. Reading the option means swapping it
+ * is a wp option update, not a release.
+ *
+ * Order: RV_GOOGLE_MAPS_API_KEY constant (for wp-config overrides), then the
+ * option, then the rv_google_maps_api_key filter.
+ *
+ * @return string Key, or '' if none is configured.
+ */
+function rv_google_maps_api_key() {
+	if ( defined( 'RV_GOOGLE_MAPS_API_KEY' ) && RV_GOOGLE_MAPS_API_KEY ) {
+		$key = RV_GOOGLE_MAPS_API_KEY;
+	} else {
+		$key = (string) get_option( 'elementor_google_maps_api_key', '' );
+	}
+
+	return trim( (string) apply_filters( 'rv_google_maps_api_key', $key ) );
+}
+
+// --- rv_google_maps_key_is_usable() ---
+
+/**
+ * Is the configured key one Google will actually serve a map for?
+ *
+ * Needed because the interesting failure is silent. With billing switched off
+ * on the owning Cloud project -- the state Anotherway's key is in -- the Maps
+ * JavaScript API loads, reports no error, does not call gm_authFailure, and
+ * simply paints nothing. The visitor gets a 500px grey rectangle on the page
+ * that is supposed to show them where the home is.
+ *
+ * So ask Google directly. The Static Maps endpoint answers 403 with a plain
+ * text body that names the cause, and both causes it names are key- or
+ * project-level, so they break the JS API too:
+ *
+ *   "You must enable Billing on the Google Cloud Project ..."
+ *   "The provided API key is invalid."
+ *
+ * Only those two count. Anything else -- a timeout, a quota trip, Static Maps
+ * being disabled for a key that is fine for Maps JS -- is treated as usable,
+ * so a false negative cannot hide a working map. Cached for 12 hours, keyed on
+ * the key itself, so pasting in a good key clears the verdict immediately
+ * rather than waiting out the transient.
+ *
+ * @param string $key The key to check.
+ * @return bool
+ */
+function rv_google_maps_key_is_usable( $key ) {
+	if ( ! $key ) {
+		return false;
+	}
+
+	$cache_key = 'rv_gmaps_key_ok_' . md5( $key );
+	$cached    = get_transient( $cache_key );
+
+	if ( false !== $cached ) {
+		return 'ok' === $cached;
+	}
+
+	$response = wp_remote_get(
+		add_query_arg(
+			array(
+				'center' => '51.5,-0.1',
+				'zoom'   => 12,
+				'size'   => '1x1',
+				'key'    => $key,
+			),
+			'https://maps.googleapis.com/maps/api/staticmap'
+		),
+		array( 'timeout' => 5 )
+	);
+
+	// Fail open: if we could not ask, assume the key is fine.
+	if ( is_wp_error( $response ) ) {
+		set_transient( $cache_key, 'ok', 5 * MINUTE_IN_SECONDS );
+		return true;
+	}
+
+	$body   = (string) wp_remote_retrieve_body( $response );
+	$broken = false !== stripos( $body, 'enable Billing' )
+		|| false !== stripos( $body, 'API key is invalid' );
+
+	set_transient( $cache_key, $broken ? 'broken' : 'ok', 12 * HOUR_IN_SECONDS );
+
+	return ! $broken;
+}

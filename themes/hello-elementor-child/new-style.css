@@ -4430,3 +4430,31 @@ body.menu-open-overlay:before{
 .btn-primary.single-brochure-view-button:hover{
 	color:#fff !important;
 }
+
+/* Google Maps fallback -- js/map.js rvRenderMapFallback().
+   Shown when the Maps JS API cannot render (no key, or a key on an unbilled
+   Google Cloud project). Fills the 500px box the shortcode reserves. */
+.rv-map-fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    height: 100%;
+    padding: 24px;
+    text-align: center;
+    background: #e9e5df;
+    border-radius: 20px;
+}
+
+.rv-map-fallback__title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #003655;
+}
+
+.rv-map-fallback__link {
+    color: #003655;
+    text-decoration: underline;
+}

@@ -68,10 +68,27 @@ function enqueue_custom_scripts()
         // (inc/shortcodes/maps.php).
         if (is_singular(array('villages', 'properties'))) {
             wp_enqueue_script('rv-map', get_stylesheet_directory_uri() . '/js/map.js', array(), filemtime(get_stylesheet_directory() . '/js/map.js'), true);
-            // The loader tag the snippet carried, reproduced exactly: async,
-            // loading=async, callback=initMap. rv-map is a dependency so
-            // initMap is defined before the API can call it.
-            wp_enqueue_script('rv-google-maps-api', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAFKJ4-I6u4mnhPKJGvBaPnQFGksvZ2v8w&loading=async&callback=initMap', array('rv-map'), null, array('in_footer' => true, 'strategy' => 'async'));
+            // The key is no longer hard-coded here -- see
+            // rv_google_maps_api_key() in inc/helpers.php for why. Skip the
+            // loader when there is no key, or when Google says the key it has
+            // cannot serve a map (rv_google_maps_key_is_usable()); js/map.js
+            // then renders its own fallback instead of leaving a 500px grey box.
+            $rv_maps_key = rv_google_maps_api_key();
+
+            if ($rv_maps_key && rv_google_maps_key_is_usable($rv_maps_key)) {
+                // The loader tag the snippet carried, reproduced exactly: async,
+                // loading=async, callback=initMap. rv-map is a dependency so
+                // initMap is defined before the API can call it.
+                $rv_maps_src = add_query_arg(
+                    array(
+                        'key'      => $rv_maps_key,
+                        'loading'  => 'async',
+                        'callback' => 'initMap',
+                    ),
+                    'https://maps.googleapis.com/maps/api/js'
+                );
+                wp_enqueue_script('rv-google-maps-api', $rv_maps_src, array('rv-map'), null, array('in_footer' => true, 'strategy' => 'async'));
+            }
         }
 
         // Custom Code post #19743 (elementor_body_end), condition

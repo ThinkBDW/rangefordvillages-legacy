@@ -274,8 +274,6 @@ function initMap() {
 				var markerIcon = createCustomMarkerIcon(getIcon(location.category), 37, 50);
 // 					var markerIcon = "https://rangeford-villages.local/wp-content/uploads/2025/02/marker-icon-blue-mobile.png";
 			}
-			console.log(markerIcon);
-		
         var marker = new google.maps.Marker({
             position: { lat: location.lat, lng: location.lng },
             map: null,
@@ -401,4 +399,92 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+});
+
+/*
+ * Fallback for when the Maps JavaScript API cannot render.
+ *
+ * Two failure modes, both seen on this site:
+ *
+ *   - No key configured at all. inc/enqueue.php then skips the loader, so
+ *     initMap is never called and #custom-google-map stays a 500px blank.
+ *   - A key whose Google Cloud project has billing disabled -- which is the
+ *     state Anotherway's key is in. The API loads, serves a single static
+ *     placeholder image instead of tiles, and calls gm_authFailure.
+ *
+ * Either way the visitor gets a grey rectangle with no explanation, on a page
+ * whose entire job is telling them where the home is. Show the location and a
+ * link out to Google Maps instead, so the information is still reachable.
+ */
+function rvRenderMapFallback() {
+    var el = document.getElementById('custom-google-map');
+
+    if (!el || el.getAttribute('data-rv-fallback') === '1') {
+        return;
+    }
+
+    el.setAttribute('data-rv-fallback', '1');
+    el.innerHTML = '';
+
+    var wrap = document.createElement('div');
+    wrap.className = 'rv-map-fallback';
+
+    var label = (typeof mainLocation === 'object' && mainLocation && mainLocation.label) ? mainLocation.label : '';
+    var heading = document.createElement('p');
+    heading.className = 'rv-map-fallback__title';
+    heading.textContent = label ? label : 'Map unavailable';
+    wrap.appendChild(heading);
+
+    if (typeof mainLocation === 'object' && mainLocation && mainLocation.lat && mainLocation.lng) {
+        var link = document.createElement('a');
+        link.className = 'rv-map-fallback__link';
+        link.href = 'https://www.google.com/maps/search/?api=1&query=' +
+            encodeURIComponent(mainLocation.lat + ',' + mainLocation.lng);
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.textContent = 'View this location on Google Maps';
+        wrap.appendChild(link);
+    }
+
+    el.appendChild(wrap);
+
+    // The category filters only drive markers that no longer exist.
+    var filters = document.querySelector('.map-filters-block');
+    if (filters) {
+        filters.style.display = 'none';
+    }
+}
+
+// Google calls this itself on an invalid/unauthorised/unbilled key.
+window.gm_authFailure = rvRenderMapFallback;
+
+// And catch the no-key case, where nothing from Google ever runs. Polled rather
+// than a single timeout: a one-shot check would show the fallback to anyone
+// whose connection had not delivered the API yet, and the fallback replaces the
+// container's contents, so a late-arriving map would have nowhere to render.
+// Give up only after the API has had 15s to appear.
+//
+// Note this cannot use "did the map paint?" as its signal. Maps JS builds the
+// map lazily, when the container first scrolls into view -- on these pages it
+// sits ~3,500px down, so an unpainted container is the normal state for a
+// visitor who has not scrolled yet, not a fault.
+document.addEventListener('DOMContentLoaded', function () {
+    if (!document.getElementById('custom-google-map')) {
+        return;
+    }
+
+    var waited = 0;
+    var poll = window.setInterval(function () {
+        if (window.google && window.google.maps) {
+            window.clearInterval(poll);
+            return;
+        }
+
+        waited += 500;
+
+        if (waited >= 15000) {
+            window.clearInterval(poll);
+            rvRenderMapFallback();
+        }
+    }, 500);
 });
