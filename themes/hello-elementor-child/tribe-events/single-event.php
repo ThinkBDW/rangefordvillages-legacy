@@ -186,8 +186,6 @@ $cost  = tribe_get_formatted_cost( $event_id );
 <?php echo do_shortcode('[elementor-template id="21161"]'); ?>
 
 <script>
-    console.log(jQuery('input[name="residentContactFirstName"]').length); // no ()
-    console.log('event loaded');
 
     if (jQuery('input[name="event-title"]').length) {
         jQuery('input[name="event-title"]').val(

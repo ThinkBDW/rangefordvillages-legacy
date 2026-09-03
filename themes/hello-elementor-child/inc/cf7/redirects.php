@@ -112,10 +112,8 @@ function redirect_cf7_with_referer()
     <?php } else { ?>
 
         <script type="text/javascript">
-            console.log(document.querySelector('.villages-thank-url'));
             document.addEventListener('wpcf7mailsent', function(event) {
                 var thankYouUrlInput = document.querySelector('.villages-thank-url'); // Check for the hidden input
-                console.log(thankYouUrlInput);
                 if (window.lastClickedBrochureButton) {
                     var termUrl = window.lastClickedBrochureButton.data('term-url');
                     if (termUrl) {
