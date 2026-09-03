@@ -272,7 +272,6 @@ function initMap() {
     mapData.forEach(function (location) {
 			if(location.category != "Select Category"){
 				var markerIcon = createCustomMarkerIcon(getIcon(location.category), 37, 50);
-// 					var markerIcon = "https://rangeford-villages.local/wp-content/uploads/2025/02/marker-icon-blue-mobile.png";
 			}
         var marker = new google.maps.Marker({
             position: { lat: location.lat, lng: location.lng },
@@ -301,14 +300,14 @@ function createCustomMarkerIcon(iconUrl, width, height) {
 }
 function getIcon(types) {
     if (!types) {
-        return 'https://rangeford-villages.local/wp-content/uploads/2025/02/marker-icon-blue-mobile.png';
+        return '/wp-content/uploads/2025/02/marker-icon-blue-mobile.png';
     }
 		const slug = types
         .toLowerCase() 
         .replace(/[\s_]+/g, '-') 
         .replace(/[^a-z0-9-]/g, '') 
         .replace(/-+/g, '-'); 
-    return "https://rangeford-villages.local/wp-content/uploads/2025/04/" + slug + "-pin-icon.svg";
+    return "/wp-content/uploads/2025/04/" + slug + "-pin-icon.svg";
 }
 	
 
