@@ -241,32 +241,106 @@
 
 
 
+/* ------------------------------- Contact form fields -------------------------
+ * The labels are written into every form definition and used to be thrown away
+ * here (display:none), leaving the placeholder as the only thing naming a
+ * field -- which disappears as soon as anyone types. Combined with a hairline
+ * underline and no border, a nine-field form read as nine pieces of grey text
+ * floating on the cream background.
+ *
+ * They are now shown, and inc/cf7/labels.php associates each one with its
+ * control and marks the required ones, so clicking a label focuses its field
+ * and a screen reader announces it. Field sizing is deliberately generous:
+ * these forms are filled in mostly by people of retirement age, often on a
+ * tablet.
+ * -------------------------------------------------------------------------- */
+
 .contact-form label {
-    visibility: hidden;
-    opacity: 0;
-    height: 0;
-    width: 0;
-    overflow: hidden;
-    display: none;
+    display: block;
+    margin-bottom: 5px;
+    color: #003655;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: 0.01em;
+}
+
+.contact-form .rv-required {
+    color: #B3261E;
+    font-weight: 700;
 }
 
 .contact-form .form-row {
-    margin-bottom: 50px;
+    margin-bottom: 26px;
 }
 
 .contact-form .wpcf7-form-control {
-    background-color: transparent;
-    border-radius: 0;
-    border: 0;
+    box-sizing: border-box;
+    background-color: #fff;
+    border: 1px solid #8C9FB4;
+    border-radius: 6px;
     outline: 0;
-    border-bottom: 1px solid #B7C0CC;
     color: #003655;
-    font-size: 18px;
-    padding: 0 10px 20px;
+    font-size: 17px;
+    line-height: 1.4;
+    padding: 8px 12px 4px 12px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    font-family: 'FS Lola Regular';
+
 }
 
+.contact-form .wpcf7-form-control:hover {
+    border-color: #5E7691;
+}
+
+/* A focus ring rather than a colour change alone: on a form this long, "which
+ * box am I in" has to be answerable at a glance and without relying on colour
+ * vision. */
+.contact-form .wpcf7-form-control:focus {
+    border-color: #003655;
+    box-shadow: 0 0 0 3px rgba(0, 54, 85, 0.18);
+}
+
+.contact-form textarea.wpcf7-form-control {
+    min-height: 140px;
+    resize: vertical;
+}
+
+/* Now that the label carries the field name, the placeholder is a hint and
+ * should not compete with the value the visitor typed. */
 .contact-form .wpcf7-form-control::placeholder {
-    color: #003655;
+    color: #6E819A;
+    opacity: 1;
+}
+
+.contact-form .wpcf7-form-control.wpcf7-not-valid {
+    border-color: #B3261E;
+}
+
+.contact-form .wpcf7-form-control.wpcf7-not-valid:focus {
+    box-shadow: 0 0 0 3px rgba(179, 38, 30, 0.18);
+}
+
+.contact-form .wpcf7-not-valid-tip {
+    display: block;
+    margin-top: 6px;
+    color: #B3261E;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* Checkbox, radio and acceptance groups are wrapped in a span that CF7 also
+ * gives the .wpcf7-form-control class. Drawing a text-field box around a list
+ * of tickboxes makes no sense, so they opt out -- matched on the same element,
+ * since the class is on the wrapper itself. */
+.contact-form .wpcf7-form-control.wpcf7-acceptance,
+.contact-form .wpcf7-form-control.wpcf7-checkbox,
+.contact-form .wpcf7-form-control.wpcf7-radio {
+    background-color: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
 }
 
 .contact-form p {
@@ -283,18 +357,60 @@
 
 
 .contact-form select {
-    background: url(img/down-arrow.svg) no-repeat;
-    background-position-x: calc(100% - 25px);
+    /* Shorthand, so it must restate the background colour or the field goes
+     * transparent against the page. */
+    background: #fff url(img/down-arrow.svg) no-repeat;
+    background-position-x: calc(100% - 18px);
     background-position-y: center;
+    padding-right: 46px;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
 
 }
 
-.brochure-form .wpcf7-form-control {
-    border-bottom: 1px solid #B7C0CC !important;
+/* --- Brochure forms: the same fields on the navy modal ---------------------
+ * White boxes would be far too loud against #003655, so the dark variant keeps
+ * the shape and the focus ring but draws the field as a translucent panel. The
+ * border is deliberately stronger than the light version's: a 1px line at 55%
+ * white on navy reads about as strongly as a solid grey line on cream. */
+
+.brochure-form label {
     color: #fff;
+}
+
+.brochure-form .rv-required {
+    /* Brand gold. Red on this navy is both hard to read and unnecessarily
+     * alarming inside a brochure request. */
+    color: #C2BB86;
+}
+
+.brochure-form .wpcf7-form-control {
+    background-color: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    color: #fff;
+}
+
+.brochure-form .wpcf7-form-control:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+.brochure-form .wpcf7-form-control:focus {
+    border-color: #fff;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+}
+
+/* img/down-arrow.svg is stroked #003655, i.e. invisible on this navy panel --
+ * which is why style.css forces `appearance: auto !important` here and lets the
+ * browser draw a native control instead. That native widget paints its own
+ * white chrome and now looks nothing like the fields around it. Give the dark
+ * context a white chevron of its own and the custom control works again. */
+.brochure-form select {
+    background-color: rgba(255, 255, 255, 0.10);
+    background-image: url("data:image/svg+xml,%3Csvg width='14' height='8' viewBox='0 0 14 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 1.5L7 6.5L2 1.5' stroke='%23ffffff' stroke-width='2' stroke-linecap='square'/%3E%3C/svg%3E");
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
 }
 
 .brochure-form select option {
@@ -303,7 +419,22 @@
 }
 
 .brochure-form .wpcf7-form-control::placeholder {
-    color: #fff;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.brochure-form .wpcf7-form-control.wpcf7-not-valid {
+    border-color: #FFC6C6;
+}
+
+.brochure-form .wpcf7-not-valid-tip {
+    color: #FFC6C6;
+}
+
+.brochure-form .wpcf7-form-control.wpcf7-acceptance,
+.brochure-form .wpcf7-form-control.wpcf7-checkbox,
+.brochure-form .wpcf7-form-control.wpcf7-radio {
+    background-color: transparent;
+    border: 0;
 }
 
 .pum-content.popmake-content .contact-form .form-row.mb-0 {
@@ -4286,19 +4417,53 @@ a.back-btn.parent-page-gallery {
     margin: 70px auto 0 auto;
 }
 
+/* The calculator's copy of the field styling, which is more specific than the
+ * .contact-form rules above and so has to be brought in alongside them rather
+ * than left on the old underline treatment. width:100% is the one thing this
+ * block adds over the shared rules, and it is kept. */
 .budget-calculator .form-section .wpcf7-form-control {
 
-    background-color: transparent;
-    border-radius: 0;
-    border: 0;
+    box-sizing: border-box;
+    background-color: #fff;
+    border: 1px solid #8C9FB4;
+    border-radius: 6px;
     outline: 0;
-    border-bottom: 1px solid #B7C0CC;
     color: #003655;
-    font-size: 18px;
-    padding: 0 10px 20px;
+    font-size: 17px;
+    line-height: 1.4;
+    padding: 13px 16px;
     width: 100%;
     font-weight: normal;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
+}
+
+.budget-calculator .form-section .wpcf7-form-control:hover {
+    border-color: #5E7691;
+}
+
+.budget-calculator .form-section .wpcf7-form-control:focus {
+    border-color: #003655;
+    box-shadow: 0 0 0 3px rgba(0, 54, 85, 0.18);
+}
+
+.budget-calculator .form-section select.wpcf7-form-control {
+    background-image: url(img/down-arrow.svg);
+    background-repeat: no-repeat;
+    background-position: calc(100% - 18px) center;
+    padding-right: 46px;
+}
+
+/* The consent checkbox keeps the calculator's own round control. */
+.budget-calculator .form-section .wpcf7-form-control.wpcf7-checkbox,
+.budget-calculator .form-section .wpcf7-form-control.wpcf7-acceptance,
+.budget-calculator .form-section .wpcf7-form-control.wpcf7-radio {
+    background-color: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    width: auto;
+    box-shadow: none;
 }
 
 .budget-calculator .form-section form {

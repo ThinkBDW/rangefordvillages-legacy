@@ -44,6 +44,9 @@ $rv_includes = array(
 	'shortcodes/brochures',
 	'shortcodes/villages',
 	'cf7/fields',
+	// Makes the forms' hand-written <label>s real labels: associated, visible
+	// and marked for required fields. Pairs with new-style.css.
+	'cf7/labels',
 	'rewrites',
 	'cf7/redirects',
 	'ajax/brochures',
