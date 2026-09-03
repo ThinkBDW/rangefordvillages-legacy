@@ -53,6 +53,14 @@ class RV_Sherpa_Store {
 	const STATUS_SKIPPED   = 'skipped';
 
 	/**
+	 * Held: the submission was judged spam and never reached the CRM.
+	 *
+	 * Terminal until a human decides. Nothing is scheduled for a held row --
+	 * it waits on the CRM Leads screen to be sent or discarded.
+	 */
+	const STATUS_SPAM      = 'spam';
+
+	/**
 	 * Table name.
 	 *
 	 * @return string
@@ -94,6 +102,7 @@ class RV_Sherpa_Store {
 			last_error TEXT NULL,
 			response LONGTEXT NULL,
 			crm_reference VARCHAR(64) NOT NULL DEFAULT '',
+			spam_context LONGTEXT NULL,
 			redacted_at DATETIME NULL,
 			PRIMARY KEY (id),
 			KEY status (status),
@@ -137,6 +146,7 @@ class RV_Sherpa_Store {
 				'last_error'      => null,
 				'response'        => null,
 				'crm_reference'   => '',
+				'spam_context'    => null,
 				'redacted_at'     => null,
 			)
 		);
@@ -159,6 +169,32 @@ class RV_Sherpa_Store {
 		$row['updated_at'] = current_time( 'mysql', true );
 
 		return false !== $wpdb->update( self::table(), $row, array( 'id' => (int) $id ) );
+	}
+
+	/**
+	 * Delete a lead outright.
+	 *
+	 * The only caller is "Discard" on a spam-held row, and that is deliberate:
+	 * everywhere else this table anonymises rather than deletes, because the
+	 * delivery record is the thing it exists to keep. A held spam row has no
+	 * delivery record to preserve -- nothing was ever sent, and the row exists
+	 * solely so a human could look at it. Once they have looked and said it is
+	 * junk, keeping an anonymised husk of a bot submission serves nobody and
+	 * would leave the screen's counts permanently wrong.
+	 *
+	 * @param int $id Lead ID.
+	 * @return bool
+	 */
+	public static function delete( $id ) {
+		global $wpdb;
+
+		$id = (int) $id;
+
+		if ( ! $id ) {
+			return false;
+		}
+
+		return (bool) $wpdb->delete( self::table(), array( 'id' => $id ), array( '%d' ) );
 	}
 
 	/**
@@ -277,6 +313,7 @@ class RV_Sherpa_Store {
 				        contact_phone = '',
 				        payload       = NULL,
 				        response      = NULL,
+				        spam_context  = NULL,
 				        redacted_at   = %s,
 				        updated_at    = %s
 				  WHERE id = %d

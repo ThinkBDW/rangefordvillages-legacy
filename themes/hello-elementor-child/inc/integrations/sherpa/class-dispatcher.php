@@ -40,14 +40,22 @@ class RV_Sherpa_Dispatcher {
 	const BACKOFF = array( 60, 300, 1800, 7200, 43200 );
 
 	/**
-	 * Capture a lead and schedule delivery.
+	 * Map, route and describe a submission, without deciding what to do with it.
 	 *
-	 * @param int   $form_id     CF7 form ID.
-	 * @param array $posted_data CF7 posted data.
-	 * @param string $form_title Form title, for the admin list.
-	 * @return int|false Lead ID, or false when the form is not configured.
+	 * Split out of capture() so that a submission judged spam is prepared exactly
+	 * the same way as an accepted one. That equivalence is the point: a held spam
+	 * row has to be a fully-formed, sendable lead, because the whole reason it is
+	 * kept is that someone may decide it was a real enquiry and release it. If
+	 * the mapping were deferred until release, a false positive would sit in the
+	 * queue for days before anyone discovered it could not be mapped at all.
+	 *
+	 * @param int    $form_id     CF7 form ID.
+	 * @param array  $posted_data CF7 posted data.
+	 * @param string $form_title  Form title, for the admin list.
+	 * @return array|false row/endpoint/payload/route, or false when the form is
+	 *                     not a configured lead form.
 	 */
-	public static function capture( $form_id, array $posted_data, $form_title = '' ) {
+	private static function prepare( $form_id, array $posted_data, $form_title = '' ) {
 		$form_id = (int) $form_id;
 		$config  = rv_sherpa_config();
 
@@ -69,20 +77,46 @@ class RV_Sherpa_Dispatcher {
 			$endpoint = RV_Sherpa_Router::endpoint( $route['community'] );
 		}
 
-		$dry_run = (bool) apply_filters( 'rv_sherpa_dry_run', RV_SHERPA_DRY_RUN, $form_id );
-
-		$lead_id = RV_Sherpa_Store::insert(
-			array(
-				'form_id'      => $form_id,
-				'form_title'   => $form_title,
-				'community_id' => (int) $route['community'],
-				'contact_name' => $contact['name'],
+		return array(
+			'endpoint' => $endpoint,
+			'payload'  => $built['payload'],
+			'route'    => $route,
+			'row'      => array(
+				'form_id'       => $form_id,
+				'form_title'    => $form_title,
+				'community_id'  => (int) $route['community'],
+				'contact_name'  => $contact['name'],
 				'contact_email' => $contact['email'],
 				'contact_phone' => $contact['phone'],
-				'endpoint'     => $endpoint,
-				'payload'      => wp_json_encode( $built['payload'] ),
-				'status'       => $dry_run ? RV_Sherpa_Store::STATUS_DRY_RUN : RV_Sherpa_Store::STATUS_PENDING,
-				'last_error'   => $warnings ? implode( ' | ', $warnings ) : null,
+				'endpoint'      => $endpoint,
+				'payload'       => wp_json_encode( $built['payload'] ),
+				'last_error'    => $warnings ? implode( ' | ', $warnings ) : null,
+			),
+		);
+	}
+
+	/**
+	 * Capture a lead and schedule delivery.
+	 *
+	 * @param int   $form_id     CF7 form ID.
+	 * @param array $posted_data CF7 posted data.
+	 * @param string $form_title Form title, for the admin list.
+	 * @return int|false Lead ID, or false when the form is not configured.
+	 */
+	public static function capture( $form_id, array $posted_data, $form_title = '' ) {
+		$form_id  = (int) $form_id;
+		$prepared = self::prepare( $form_id, $posted_data, $form_title );
+
+		if ( ! $prepared ) {
+			return false;
+		}
+
+		$endpoint = $prepared['endpoint'];
+		$dry_run  = (bool) apply_filters( 'rv_sherpa_dry_run', RV_SHERPA_DRY_RUN, $form_id );
+
+		$lead_id = RV_Sherpa_Store::insert(
+			$prepared['row'] + array(
+				'status' => $dry_run ? RV_Sherpa_Store::STATUS_DRY_RUN : RV_Sherpa_Store::STATUS_PENDING,
 			)
 		);
 
@@ -100,8 +134,8 @@ class RV_Sherpa_Dispatcher {
 				sprintf(
 					'[rv-sherpa] FAILED TO STORE LEAD form=%d routing=%s payload=%s',
 					$form_id,
-					$route['reason'],
-					wp_json_encode( $built['payload'] )
+					$prepared['route']['reason'],
+					wp_json_encode( $prepared['payload'] )
 				)
 			);
 			return false;
@@ -122,6 +156,180 @@ class RV_Sherpa_Dispatcher {
 		self::schedule( $lead_id, 0 );
 
 		return $lead_id;
+	}
+
+	/**
+	 * Hold a submission that was judged spam, instead of losing it.
+	 *
+	 * WHY THIS EXISTS. Spam protection on this site is Akismet plus the honeypot,
+	 * and Akismet fails CLOSED: a spam verdict aborts the submission, so no lead
+	 * is captured, no notification is sent, and the visitor is told only that
+	 * "there was an error -- please try again later". Nothing is written down
+	 * anywhere. Flamingo is not installed, so before this existed a false
+	 * positive was an enquiry that silently never happened.
+	 *
+	 * That is not a theoretical risk. Akismet was observed on 2026-09-03
+	 * rejecting every submission from this site for an extended period --
+	 * identical wording that it had accepted minutes earlier, regardless of the
+	 * blog URL or the visitor IP sent with the check. Its verdict on a given
+	 * submission is not reproducible, and it is now the only substantive layer.
+	 *
+	 * So a held row is a complete, sendable lead that simply has not been sent.
+	 * A human releases it or discards it from the CRM Leads screen.
+	 *
+	 * WHAT IS NOT HELD. A verdict that any agent other than Akismet contributed
+	 * to -- in practice the honeypot -- is dropped as before. The honeypot is
+	 * deterministic: it is tripped by filling a field that is invisible to
+	 * people, or by submitting faster than a person can type. It does not have
+	 * false positives worth a review queue, and holding what it catches would
+	 * bury the Akismet cases in bot traffic while accumulating personal data
+	 * from actual spammers. Same reasoning as the test allowlist in
+	 * audit/scripts/rv-cf7-test-allowlist.php.
+	 *
+	 * @param int    $form_id     CF7 form ID.
+	 * @param array  $posted_data CF7 posted data.
+	 * @param string $form_title  Form title, for the admin list.
+	 * @param array  $context     spam log entries and the Akismet parameters.
+	 * @return int|false Lead ID, or false when nothing was held.
+	 */
+	public static function capture_spam( $form_id, array $posted_data, $form_title = '', array $context = array() ) {
+		$prepared = self::prepare( (int) $form_id, $posted_data, $form_title );
+
+		if ( ! $prepared ) {
+			return false;
+		}
+
+		$row = $prepared['row'];
+
+		// last_error keeps the mapper's routing warnings and nothing else. The
+		// spam verdict goes in spam_context, which is where the admin screen
+		// reads it from: folding the two together produced rows whose Detail
+		// column read "sourceName was posted as 'Internet'; sent as 'Company
+		// Website' | akismet: Akismet returns a spam response." -- one routine
+		// note that is on every lead by design, welded to the only sentence
+		// that actually explains why the row is here.
+		$row['status']       = RV_Sherpa_Store::STATUS_SPAM;
+		$row['spam_context'] = wp_json_encode( $context );
+
+		$lead_id = RV_Sherpa_Store::insert( $row );
+
+		if ( ! $lead_id ) {
+			// Same last-resort as capture(): a lead nobody can see is worse than a
+			// line in the log.
+			error_log(
+				sprintf(
+					'[rv-sherpa] FAILED TO STORE SPAM-HELD LEAD form=%d payload=%s',
+					(int) $form_id,
+					wp_json_encode( $prepared['payload'] )
+				)
+			);
+			return false;
+		}
+
+		// Nothing is scheduled. A held row is terminal until a human acts on it.
+		return $lead_id;
+	}
+
+	/**
+	 * Release a held lead into the CRM.
+	 *
+	 * @param int $lead_id Lead ID.
+	 * @return true|string true, or a reason it could not be released.
+	 */
+	public static function approve_spam( $lead_id ) {
+		$lead = RV_Sherpa_Store::get( $lead_id );
+
+		if ( ! $lead || RV_Sherpa_Store::STATUS_SPAM !== $lead->status ) {
+			return 'that lead is not being held';
+		}
+
+		if ( ! empty( $lead->redacted_at ) ) {
+			return 'the details were erased by the retention sweep, so there is nothing left to send';
+		}
+
+		// Tell Akismet it got this one wrong before doing anything else. This is
+		// the only moment the correction is known, and reporting it is what stops
+		// the same enquirer being rejected again next time.
+		self::report_to_akismet( $lead, 'submit-ham' );
+
+		if ( '' === $lead->endpoint ) {
+			// Routable leads are the normal case; an unroutable one becomes an
+			// ordinary undelivered lead so it shows up in the failure count
+			// rather than disappearing from the held list into nothing.
+			RV_Sherpa_Store::update( $lead_id, array( 'status' => RV_Sherpa_Store::STATUS_FAILED ) );
+			return 'the lead has no community to send to; it is now listed as undelivered';
+		}
+
+		$dry_run = (bool) apply_filters( 'rv_sherpa_dry_run', RV_SHERPA_DRY_RUN, (int) $lead->form_id );
+
+		RV_Sherpa_Store::update(
+			$lead_id,
+			array(
+				'attempts' => 0,
+				'status'   => $dry_run ? RV_Sherpa_Store::STATUS_DRY_RUN : RV_Sherpa_Store::STATUS_PENDING,
+			)
+		);
+
+		if ( $dry_run ) {
+			return true;
+		}
+
+		self::schedule( $lead_id, 0 );
+
+		return true;
+	}
+
+	/**
+	 * Discard a held lead.
+	 *
+	 * @param int $lead_id Lead ID.
+	 * @return bool
+	 */
+	public static function discard_spam( $lead_id ) {
+		$lead = RV_Sherpa_Store::get( $lead_id );
+
+		if ( ! $lead || RV_Sherpa_Store::STATUS_SPAM !== $lead->status ) {
+			return false;
+		}
+
+		// Confirming a correct verdict is worth as much as correcting a wrong one:
+		// both are what keep the key's judgement on this site accurate.
+		self::report_to_akismet( $lead, 'submit-spam' );
+
+		return RV_Sherpa_Store::delete( $lead_id );
+	}
+
+	/**
+	 * Report a human's decision back to Akismet.
+	 *
+	 * Uses the low-level endpoint rather than Akismet::submit_ham(), which takes
+	 * a wp_comments row ID -- these submissions are not comments and never touch
+	 * that table. The parameters are the ones the comment-check was actually made
+	 * with, stashed at the time by rv_sherpa_remember_akismet_parameters().
+	 *
+	 * Deliberately best-effort. A CRM release must not fail because Akismet is
+	 * unreachable, so everything here is swallowed and logged.
+	 *
+	 * @param object $lead     Lead row.
+	 * @param string $endpoint 'submit-ham' or 'submit-spam'.
+	 */
+	private static function report_to_akismet( $lead, $endpoint ) {
+		if ( ! class_exists( 'Akismet' ) || ! method_exists( 'Akismet', 'http_post' ) ) {
+			return;
+		}
+
+		$context = json_decode( (string) $lead->spam_context, true );
+		$params  = is_array( $context ) ? ( $context['akismet'] ?? array() ) : array();
+
+		if ( ! is_array( $params ) || ! $params ) {
+			return;
+		}
+
+		try {
+			Akismet::http_post( Akismet::build_query( $params ), $endpoint );
+		} catch ( Throwable $e ) {
+			error_log( '[rv-sherpa] ' . $endpoint . ' failed for lead ' . (int) $lead->id . ': ' . $e->getMessage() );
+		}
 	}
 
 	/**

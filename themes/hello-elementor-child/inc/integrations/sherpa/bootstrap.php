@@ -48,8 +48,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * 1.1.0 adds crm_reference and redacted_at for the retention policy in
  * class-store.php.
+ * 1.2.0 adds spam_context, which carries the spam verdict and the parameters
+ * the Akismet check was made with, so a held submission can be reviewed and a
+ * false positive reported back as ham.
  */
-define( 'RV_SHERPA_DB_VERSION', '1.1.0' );
+define( 'RV_SHERPA_DB_VERSION', '1.2.0' );
 
 /** Sherpa company ID. Constant across all six communities. */
 define( 'RV_SHERPA_COMPANY_ID', 27 );
@@ -341,6 +344,12 @@ function rv_sherpa_token() {
  *             needs the payload -- but only briefly, and never for long enough
  *             to matter if dry run is ever left on somewhere real.
  *   skipped    7 days. Same reasoning.
+ *   spam      30 days. A held submission is either a false positive worth a
+ *             couple of minutes of somebody's attention, or it is junk. Neither
+ *             improves with age, and holding a spammer's contact details for
+ *             the same ninety days granted to a real undelivered enquiry gets
+ *             the trade-off backwards. Thirty days is long enough to survive
+ *             a holiday.
  *
  * Set a value to -1 to keep indefinitely. Nothing does, by design.
  *
@@ -353,6 +362,7 @@ function rv_sherpa_retention_days() {
 			RV_Sherpa_Store::STATUS_FAILED  => 90,
 			RV_Sherpa_Store::STATUS_DRY_RUN => 7,
 			RV_Sherpa_Store::STATUS_SKIPPED => 7,
+			RV_Sherpa_Store::STATUS_SPAM    => 30,
 		)
 	);
 }
