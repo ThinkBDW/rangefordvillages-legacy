@@ -1001,12 +1001,12 @@ a.book-appointment:hover{
 }
 
 body{
-	padding-top:112px;
+	padding-top:10px;
 }
 
 @media(min-width:1025px){
 	body{
-		padding-top:130px;
+		padding-top:90px;
 	}
 }
 .elementor-location-header{
