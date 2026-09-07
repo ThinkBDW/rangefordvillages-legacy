@@ -1017,6 +1017,26 @@ body{
 	z-index:999999;
 }
 
+/* The header's z-index (above) is 999999; core gives #wpadminbar 99999, so the
+   header always wins. Being position:fixed it also ignores the
+   html{margin-top:32px} that core adds to clear the bar, so it landed squarely
+   on top of the admin toolbar and hid it - the "Elementor edit shortcuts have
+   disappeared" report of 2026-09-04. Push the header down by the bar's height
+   rather than lowering its z-index, which would drop it under the mega-menu
+   overlays. --wp-admin--admin-bar--height is set by core on <html> (32px, 46px
+   under 782px); the 0px fallback makes this a no-op if it ever goes away. */
+.admin-bar .elementor-location-header{
+	top:var(--wp-admin--admin-bar--height, 0px);
+}
+
+/* Under 600px core switches #wpadminbar to position:absolute so it scrolls
+   away - the header must sit flush again or it leaves a 46px gap. */
+@media screen and (max-width:600px){
+	.admin-bar .elementor-location-header{
+		top:0;
+	}
+}
+
 .back-btn .elementor-button {
 	fill: var(--e-global-color-secondary) !important;
     color: var(--e-global-color-secondary) !important;
