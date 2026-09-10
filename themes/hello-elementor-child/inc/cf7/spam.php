@@ -26,6 +26,10 @@
  *     now the only check that costs nothing and involves no third party,
  *     so it stays on all seventeen forms.
  *
+ * Akismet's verdict can be switched off per environment with
+ * RV_CF7_AKISMET_DISABLED -- see rv_cf7_disable_akismet(). The plugin stays
+ * active and keyed when it is; only the wpcf7_spam hook goes.
+ *
  * @package hello-elementor-child
  */
 
@@ -63,6 +67,58 @@ function rv_cf7_disable_recaptcha() {
 	remove_filter( 'wpcf7_spam', 'wpcf7_recaptcha_verify_response', 9 );
 }
 add_action( 'init', 'rv_cf7_disable_recaptcha', 1 );
+
+/**
+ * Whether Akismet's verdict is switched off for this site.
+ *
+ * WHY A CONSTANT RATHER THAN AN OPTION. This is an environment decision, not an
+ * editorial one: a staging copy should not be spending the key's reputation on
+ * test traffic, while production may want the check on. It also must not be
+ * flippable from wp-admin -- turning it on leaves the honeypot as the only
+ * layer, which is exactly the kind of quiet change this file exists to prevent.
+ * Define it in wp-config.php, next to RV_SHERPA_DRY_RUN.
+ *
+ * The filter is for tests and for a temporary override from a mu-plugin.
+ *
+ * @return bool
+ */
+function rv_cf7_akismet_is_disabled() {
+	$disabled = defined( 'RV_CF7_AKISMET_DISABLED' ) && RV_CF7_AKISMET_DISABLED;
+
+	return (bool) apply_filters( 'rv_cf7_akismet_disabled', $disabled );
+}
+
+/**
+ * Take Akismet out of the submission path, leaving the plugin itself alone.
+ *
+ * CF7's module registers exactly one verdict hook -- see
+ * modules/akismet/akismet.php -- so removing it stops the check before the API
+ * call is built: no POST to Akismet, no wait for the answer on submit, and no
+ * enquirer data leaving the site.
+ *
+ * WHY NOT JUST DEACTIVATE THE PLUGIN. Two things still need it. Akismet::http_post()
+ * is how RV_Sherpa_Dispatcher::report_to_akismet() clears the held-submission
+ * backlog -- those rows predate the switch and their Send to CRM / Discard
+ * decisions should still be reported. And wpcf7_akismet_is_available() staying
+ * true keeps Settings -> Integration honest about the key being present, so
+ * turning the check back on is one line rather than a reinstall.
+ *
+ * Removing the annotations instead (rv_cf7_akismet_annotate_tag) would also
+ * work, because wpcf7_akismet_submitted_params() bails when no tag carries an
+ * akismet: option -- but by side effect. Someone reading this file later would
+ * see Akismet fully wired and no obvious reason it never fires.
+ *
+ * init at priority 1, matching rv_cf7_disable_recaptcha: CF7 loads its modules
+ * on plugins_loaded, so the hook exists by now, and wpcf7_spam fires later.
+ */
+function rv_cf7_disable_akismet() {
+	if ( ! rv_cf7_akismet_is_disabled() ) {
+		return;
+	}
+
+	remove_filter( 'wpcf7_spam', 'wpcf7_akismet', 10 );
+}
+add_action( 'init', 'rv_cf7_disable_akismet', 1 );
 
 /**
  * CF7 field names that hold the enquirer's own name.
@@ -240,6 +296,24 @@ function rv_cf7_spam_protection_notice() {
 		|| false !== strpos( $id, 'rv-sherpa-leads' );
 
 	if ( ! $relevant ) {
+		return;
+	}
+
+	// Switched off deliberately is still worth saying out loud. It leaves the
+	// honeypot as the only layer, and it silently empties the held-submission
+	// queue that CRM Leads offers to review -- neither of which is visible from
+	// anywhere else in wp-admin.
+	if ( rv_cf7_akismet_is_disabled() ) {
+		printf(
+			'<div class="notice notice-warning"><p><strong>Akismet is switched off for form submissions.</strong> '
+				. 'Its verdict is removed in code, because <code>RV_CF7_AKISMET_DISABLED</code> is set in '
+				. '<code>wp-config.php</code>. %s No new submissions can be held for review, because there are no '
+				. 'Akismet verdicts left to hold. See <code>inc/cf7/spam.php</code>.</p></div>',
+			rv_cf7_honeypot_is_active()
+				? 'The honeypot is now the only spam filter on the forms.'
+				: '<strong>The honeypot is not registered either, so the forms have no spam filter at all.</strong>'
+		);
+
 		return;
 	}
 
