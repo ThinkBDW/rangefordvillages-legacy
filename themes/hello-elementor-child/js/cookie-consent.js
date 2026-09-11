@@ -119,14 +119,14 @@
             consentModal: {
                 layout: 'box inline',
                 position: 'bottom left',
-                equalWeightButtons: true,
-                flipButtons: true,
+                equalWeightButtons: false,
+                flipButtons: false,
             },
             preferencesModal: {
                 layout: 'box',
                 position: 'right',
                 equalWeightButtons: true,
-                flipButtons: true,
+                flipButtons: false,
             },
         },
         categories: {
