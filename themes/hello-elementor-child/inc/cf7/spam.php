@@ -344,3 +344,41 @@ function rv_cf7_spam_protection_notice() {
 	);
 }
 add_action( 'admin_notices', 'rv_cf7_spam_protection_notice' );
+
+/**
+ * Keep CF7's REST responses out of SiteGround's page cache.
+ *
+ * The honeypot plugin (CF7 Apps 3.7.x) names its trap field with a random
+ * string it keeps in a daily transient, and the server only accepts a post
+ * that carries today's name. Because cached pages hold a stale name, its script
+ * calls CF7's GET /contact-forms/{id}/refill on every page load and renames the
+ * field from the reply. SiteGround's dynamic cache caches that GET like any
+ * other anonymous request, so the "fresh" name was a cached one too.
+ * On 2026-09-24 the A91 page, rendered at 11:17 with field `jjlwpyialq68`, was
+ * renamed to `zb0g3nizlnoc` by a refill cached at 05:06. The server no
+ * longer expected that name, so every brochure download was judged spam, and
+ * the visitor only saw "There was an error trying to send your message".
+ * Akismet being off made no difference: the honeypot is what failed.
+ *
+ * WordPress only sends no-cache headers on REST responses to logged-in users,
+ * so they are added here for the whole CF7 namespace. The plugin's own
+ * submissions are POSTs and were never cached; this is about the refill.
+ *
+ * @param WP_HTTP_Response|mixed $response Result about to be served.
+ * @param WP_REST_Server         $server   Server instance.
+ * @param WP_REST_Request        $request  Request being served.
+ * @return WP_HTTP_Response|mixed
+ */
+function rv_cf7_rest_nocache( $response, $server, $request ) {
+	if ( $response instanceof WP_HTTP_Response
+		&& 0 === strpos( $request->get_route(), '/contact-form-7/' ) ) {
+		foreach ( wp_get_nocache_headers() as $name => $value ) {
+			if ( $value ) {
+				$response->header( $name, $value );
+			}
+		}
+	}
+
+	return $response;
+}
+add_filter( 'rest_post_dispatch', 'rv_cf7_rest_nocache', 10, 3 );

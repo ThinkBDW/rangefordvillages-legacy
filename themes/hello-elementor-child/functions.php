@@ -55,6 +55,9 @@ $rv_includes = array(
 	'cf7/spam',
 	'shortcodes/budget-calculator',
 	'brochure-modal',
+	// Stops an Elementor save from unassigning the site header/footer, and
+	// logs every display-condition change (Tools -> Theme Template Log).
+	'theme-builder-guard',
 	// Removed 2026-09-02: 'integrations/sherpa/legacy-source-fields'. It was a
 	// wp_footer script that overwrote vendorName / sourceCategory / sourceName
 	// from ACF options and then let the "how did you hear about us" dropdown

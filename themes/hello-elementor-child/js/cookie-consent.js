@@ -110,6 +110,64 @@
         window.dataLayer.push(state);
     }
 
+    /*
+     * Consent decisions, counted in Fathom (audit/gtm/fathom-consent-events-plan.md).
+     * GA only sees visitors who accept analytics, so nothing else records how
+     * many do -- and that accept rate is what separates "people are opting
+     * out" from "GA is losing consented hits". Fathom is cookieless and
+     * already runs outside this banner, so counting here needs no consent of
+     * its own. Event names only: no URL, no value, nothing about the visitor.
+     *
+     * Each event is sent once per decision. onConsent is deliberately not
+     * used: it fires on every page load, so it would count page views.
+     *
+     * Fathom's <script defer> runs after this footer script, so on a first
+     * visit window.fathom is usually undefined when the banner opens. Events
+     * are queued until it appears. Once the page has finished loading the
+     * wait is capped, so a blocked Fathom does not poll for ever.
+     */
+    var FATHOM_RETRY_MS = 500;
+    var FATHOM_MAX_RETRIES_AFTER_LOAD = 10;
+    var fathomQueue = [];
+    var fathomRetries = 0;
+    var fathomTimer = null;
+
+    function fathomReady() {
+        return !!window.fathom && typeof window.fathom.trackEvent === 'function';
+    }
+
+    function flushFathomQueue() {
+        fathomTimer = null;
+        if (fathomReady()) {
+            while (fathomQueue.length) {
+                window.fathom.trackEvent(fathomQueue.shift());
+            }
+            return;
+        }
+        if (document.readyState === 'complete') {
+            fathomRetries++;
+        }
+        if (fathomRetries > FATHOM_MAX_RETRIES_AFTER_LOAD) {
+            fathomQueue.length = 0;
+            return;
+        }
+        fathomTimer = setTimeout(flushFathomQueue, FATHOM_RETRY_MS);
+    }
+
+    function trackConsentEvent(name) {
+        if (fathomRetries > FATHOM_MAX_RETRIES_AFTER_LOAD) {
+            return; // Fathom never arrived on this page.
+        }
+        if (fathomReady() && !fathomQueue.length) {
+            window.fathom.trackEvent(name);
+            return;
+        }
+        fathomQueue.push(name);
+        if (!fathomTimer) {
+            fathomTimer = setTimeout(flushFathomQueue, FATHOM_RETRY_MS);
+        }
+    }
+
     CookieConsent.run({
         disablePageInteraction: true,
         hideFromBots: true,
@@ -168,6 +226,28 @@
                 },
             },
         },
+        onFirstConsent: function () {
+            var analytics = CookieConsent.acceptedCategory('analytics');
+            var marketing = CookieConsent.acceptedCategory('marketing');
+            var choice;
+            if (analytics && marketing) {
+                choice = 'accept all';
+            } else if (analytics) {
+                choice = 'analytics only';
+            } else if (marketing) {
+                choice = 'marketing only';
+            } else {
+                choice = 'reject all';
+            }
+            trackConsentEvent('Consent ' + choice);
+        },
+        onModalShow: function (param) {
+            if (param.modalName === 'consentModal') {
+                trackConsentEvent('Consent banner shown');
+            } else if (param.modalName === 'preferencesModal') {
+                trackConsentEvent('Consent preferences opened');
+            }
+        },
         onConsent: function () {
             if (CookieConsent.acceptedCategory('analytics')) {
                 pushConsentState('analytics', true);
@@ -177,6 +257,7 @@
             }
         },
         onChange: function (param) {
+            trackConsentEvent('Consent changed');
             var changed = param.changedCategories;
             if (changed.indexOf('analytics') !== -1) {
                 pushConsentState('analytics', CookieConsent.acceptedCategory('analytics'));
