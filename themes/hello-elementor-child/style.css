@@ -32,11 +32,10 @@ Updated: 2023-12-18 10:34:49
     margin: 10px;
     box-sizing: border-box;
     position: relative;
-
 }
 body .properties-extra-info h5 {
-    color: #FFF;
-    font-family: "FS Lola Regular", Sans-serif !important;
+    color: #fff;
+    font-family: 'FS Lola Regular', Sans-serif !important;
     font-weight: normal;
     font-style: normal;
     font-size: 18px;
@@ -45,7 +44,7 @@ body .properties-extra-info h5 {
     text-transform: capitalize;
     margin: 0px;
 }
-.jump-list ul li{
+.jump-list ul li {
     background-color: #fff;
     border-style: solid;
     border-width: 1px 1px 1px 1px;
@@ -54,23 +53,23 @@ body .properties-extra-info h5 {
     padding: 13.5px !important;
     height: 54px;
     border-radius: 54px;
-    font-family: "FS Lola Regular", Sans-serif;
+    font-family: 'FS Lola Regular', Sans-serif;
     font-weight: normal;
-	margin-bottom: 5px !important;
+    margin-bottom: 5px !important;
     margin-top: 5px !important;
 }
-.jump-list ul li:hover{
-    background-color: #C2BB86;
+.jump-list ul li:hover {
+    background-color: #c2bb86;
     color: #fff !important;
 }
-.jump-list ul li:hover a span{
+.jump-list ul li:hover a span {
     color: #fff !important;
 }
-.map-button a.elementor-button{
-    width:100%;
+.map-button a.elementor-button {
+    width: 100%;
     text-shadow: none;
 }
-.jump-list ul li:first-child{
+.jump-list ul li:first-child {
     background: transparent !important;
     border: 0;
     color: #003655 !important;
@@ -82,65 +81,66 @@ body .properties-extra-info h5 {
 }
 body .property-tiles-container .icon-listing li {
     font-size: 19px !important;
-    font-family: "FS Lola Regular", Sans-serif;
+    font-family: 'FS Lola Regular', Sans-serif;
     font-weight: normal;
     font-style: normal;
     line-height: 24px;
 }
-body .property-tiles-container-2 .icon-listing li{
+body .property-tiles-container-2 .icon-listing li {
     font-size: 19px !important;
-    font-family: "FS Lola Regular", Sans-serif;
+    font-family: 'FS Lola Regular', Sans-serif;
     font-weight: normal;
     font-style: normal;
     line-height: 24px;
 }
-.properties-banner .baner-image h1{
+.properties-banner .baner-image h1 {
     letter-spacing: 4.71px;
 }
-.properties-banner p{
-    font-family: "FS Lola Regular", Sans-serif;
+.properties-banner p {
+    font-family: 'FS Lola Regular', Sans-serif;
     font-weight: normal;
     font-style: normal;
     line-height: 24px;
 }
-.saved-properties, #price_sorting{
-    font-family: "FS Lola Regular", Sans-serif;
+.saved-properties,
+#price_sorting {
+    font-family: 'FS Lola Regular', Sans-serif;
     font-weight: normal;
     font-style: normal;
 }
-.more-filter-data *, .more-filter-data h6{
-    font-family: "FS Lola Regular", Sans-serif !important;
+.more-filter-data *,
+.more-filter-data h6 {
+    font-family: 'FS Lola Regular', Sans-serif !important;
     font-weight: normal !important;
     font-style: normal !important;
 }
 .property-tile h2 {
     font-size: 25px !important;
 }
-.property-tiles-container-2 .content h5{
+.property-tiles-container-2 .content h5 {
     letter-spacing: 4.05px;
     font-weight: 400;
 }
-.home-hero-slider .top-content h2{
+.home-hero-slider .top-content h2 {
     letter-spacing: 4.96px;
 }
-.wpcf7-form input, .wpcf7-form textarea{
-    font-family: "FS Lola Regular", Sans-serif;
+.wpcf7-form input,
+.wpcf7-form textarea {
+    font-family: 'FS Lola Regular', Sans-serif;
     font-weight: normal;
     font-style: normal;
 }
-.home-hero-slider .top-content h6{
-    font-family: "FS Lola Regular", Sans-serif;
+.home-hero-slider .top-content h6 {
+    font-family: 'FS Lola Regular', Sans-serif;
     font-weight: normal;
     font-style: normal;
     font-size: 21px;
     line-height: 28px;
-
 }
-.home-hero-slider .bottom-section p{
-    font-family: "FS Lola Regular", Sans-serif;
+.home-hero-slider .bottom-section p {
+    font-family: 'FS Lola Regular', Sans-serif;
     font-weight: normal;
     font-style: normal;
-
 }
 /* .slick-prev:before {
     content: "<";
@@ -153,7 +153,6 @@ body .property-tiles-container-2 .icon-listing li{
     color: red;
     font-size: 30px;
   } */
-
 
 @keyframes spin {
     0% {
@@ -198,7 +197,7 @@ body .property-tiles-container-2 .icon-listing li{
 #loader {
     border: 16px solid #f3f3f3;
     /* Customize the border color */
-    border-top: 16px solid #C2BB86;
+    border-top: 16px solid #c2bb86;
     /* Customize the spinner color */
     border-radius: 50%;
     width: 120px;
@@ -227,7 +226,7 @@ span.wishlist-count {
     top: 4px;
     width: 23px;
     text-align: center;
-    font-family: "FS Lola Regular", Sans-serif;
+    font-family: 'FS Lola Regular', Sans-serif;
 }
 
 .filter {
@@ -240,7 +239,7 @@ span.wishlist-count {
 }
 
 .more-filter-data h6 {
-    color: #C2BB86 !important;
+    color: #c2bb86 !important;
     font-size: 18px !important;
     font-style: normal;
     font-weight: 400;
@@ -252,7 +251,7 @@ span.wishlist-count {
 .news-section article {
     border-left: 1px solid var(--e-global-color-primary);
 } */
-.news-event-section article .article-section{
+.news-event-section article .article-section {
     border: 0 !important;
 }
 .news-section .elementor-post__text {
@@ -269,8 +268,8 @@ span.wishlist-count {
 }
 
 .news-section .elementor-post__read-more:after {
-    content: "\f054";
-    font-family: "Font Awesome 5 Free";
+    content: '\f054';
+    font-family: 'Font Awesome 5 Free';
     font-weight: 600;
     font-size: 16px;
     margin-left: 1rem;
@@ -289,7 +288,7 @@ span.wishlist-count {
 .all-price {
     width: 50%;
 }
-.amenities{
+.amenities {
     padding-top: 20px;
 }
 .main-condition {
@@ -305,8 +304,8 @@ span.wishlist-count {
     gap: 3px;
 }
 
-@media (max-width:767px){
-    .back-property{
+@media (max-width: 767px) {
+    .back-property {
         top: 24% !important;
         bottom: 0 !important;
         left: 3% !important;
@@ -323,41 +322,41 @@ span.wishlist-count {
     }
     .show .sub-menu {
         transform: translateX(00%);
-
     }
 }
 
-.header-propertis a, .header-propertis a:hover{
-    color:#fff;
+.header-propertis a,
+.header-propertis a:hover {
+    color: #fff;
 }
 .accordion {
     margin: 20px auto;
-  }
-  
-  .accordion-section {
+}
+
+.accordion-section {
     border-bottom: 1px solid #ddd;
     margin-bottom: 14px;
     background-color: transparent;
-  }
-  
-  .accordion-header {
+}
+
+.accordion-header {
     padding: 10px;
     cursor: pointer;
     user-select: none;
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  
-  .accordion-content {
+}
+
+.accordion-content {
     display: none;
     padding: 10px;
-  }
-  
-  .toggle-icon {
+}
+
+.toggle-icon {
     font-weight: bold;
-  }
-  .download {
+}
+.download {
     display: flex;
     border-bottom: 1px solid #1d1d1b;
     justify-content: space-evenly;
@@ -371,7 +370,7 @@ span.wishlist-count {
     padding-right: 14px;
     color: #1d1d1b;
 }
-.download div a{
+.download div a {
     color: #1d1d1b;
 }
 .download-image {
@@ -379,10 +378,11 @@ span.wishlist-count {
     gap: 36px;
     align-items: center;
 }
-.download-image p{
+.download-image p {
     margin-bottom: 0px;
 }
-.lightbox , .lightbox-video {
+.lightbox,
+.lightbox-video {
     position: fixed;
     top: 0;
     left: 0;
@@ -397,34 +397,35 @@ span.wishlist-count {
     overflow: scroll;
     justify-content: center;
 }
-.lightbox{
-    padding:0px !important;
+.lightbox {
+    padding: 0px !important;
 }
-.back-property:before{
-	content:'';
-	position:absolute;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	top: 0;
+.back-property:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
 }
-@media(min-width:1200px){
-    .lightbox , .lightbox-video{
+@media (min-width: 1200px) {
+    .lightbox,
+    .lightbox-video {
         justify-content: center;
     }
 }
-  .slider-popup-image {
+.slider-popup-image {
     width: 100%;
     max-width: 800px;
-  }
-  
-  .close-icon {
+}
+
+.close-icon {
     position: absolute;
     top: 10px;
     right: 10px;
     cursor: pointer;
-  }
-  .property-tile1 .wishlist-icon {
+}
+.property-tile1 .wishlist-icon {
     position: absolute;
     z-index: 999;
     left: 24%;
@@ -432,7 +433,7 @@ span.wishlist-count {
     color: #fff;
     cursor: pointer;
 }
-.saved-properties .property-tile .wishlist-icon{
+.saved-properties .property-tile .wishlist-icon {
     position: relative;
 }
 .villages-list {
@@ -442,11 +443,11 @@ span.wishlist-count {
     column-gap: 49px;
 }
 #popmake-10766,
-#popmake-32688{
+#popmake-32688 {
     background-color: #003655;
     border: 0;
     padding: 70px;
-	border-radius: 92px;
+    border-radius: 92px;
 }
 
 .village-post {
@@ -466,7 +467,7 @@ span.wishlist-count {
     text-align: center;
     margin-top: 10px;
 }
-body .villages-list h2{
+body .villages-list h2 {
     text-align: center;
     font-family: Optima;
     font-size: 34px;
@@ -480,26 +481,26 @@ body .villages-list h2{
     width: 100%;
     margin: 4px auto 14px auto;
 }
-.download-link img{
+.download-link img {
     padding-left: 21px;
     vertical-align: middle;
 }
 .download-link {
     padding-top: 14px;
 }
-.inner-village-post{
+.inner-village-post {
     text-align: center;
     position: absolute;
     bottom: 50px;
     width: 100%;
 }
-.explore-link a{
+.explore-link a {
     width: 191px;
     height: 48px;
     line-height: 48px;
     flex-shrink: 0;
     border-radius: 40px;
-    background:  #FFF;
+    background: #fff;
     display: inline-block;
     color: #003655;
     text-align: center;
@@ -507,8 +508,8 @@ body .villages-list h2{
     font-style: normal;
     font-weight: 400;
 }
-.download-link a{
-    color: #FFF;
+.download-link a {
+    color: #fff;
     text-align: center;
     font-family: FS Lola;
     font-size: 18px;
@@ -524,7 +525,7 @@ body .villages-list h2{
     gap: 15px;
     float: right;
 }
-.property-home .property-tile{
+.property-home .property-tile {
     width: calc(50% - 20px);
 }
 img.play-icon {
@@ -535,11 +536,11 @@ img.play-icon {
     top: 248px;
     margin: 0 auto;
 }
-.video-section{
+.video-section {
     position: relative;
 }
 body h2.top-main-title {
-    color: #C2BB86;
+    color: #c2bb86;
     font-family: Bacalisties;
     font-size: 54.08px;
     font-style: normal;
@@ -551,10 +552,10 @@ body h2.top-main-title {
     gap: 44px;
     text-align: center;
 }
-.amenities1 label{
+.amenities1 label {
     line-height: normal;
-    border: 1px solid #C2BB86;
-    color: #1D1D1B;
+    border: 1px solid #c2bb86;
+    color: #1d1d1b;
     padding: 5px 10px;
     border-radius: 30px;
     margin: 5px;
@@ -567,7 +568,7 @@ body h2.top-main-title {
 }
 
 .amenities1 label.checked-label {
-    background-color: #C2BB86;
+    background-color: #c2bb86;
 }
 .amenities1:before {
     content: '';
@@ -579,12 +580,10 @@ body h2.top-main-title {
 #map .e-con-inner {
     margin: 0;
 }
-.custom-slider-park .slider-item img{
-   
+.custom-slider-park .slider-item img {
     border-radius: 40px;
     width: 560px;
     height: auto;
-    
 }
 .custom-slider-park img.a-right.control-c.next.slick-next.slick-arrow {
     position: absolute;
@@ -598,12 +597,12 @@ body h2.top-main-title {
     z-index: 999;
     top: 38%;
 }
-.custom-slider-park  .slick-slide {
+.custom-slider-park .slick-slide {
     margin: 0 30px;
 }
-.information-slider .custom-slider-park .slider-item-text{
-    color: #FFF;
-    font-family: "Optima", Sans-serif;
+.information-slider .custom-slider-park .slider-item-text {
+    color: #fff;
+    font-family: 'Optima', Sans-serif;
     font-size: 26px;
     font-style: normal;
     font-weight: 400;
@@ -611,9 +610,9 @@ body h2.top-main-title {
     text-transform: uppercase;
     letter-spacing: 2.6px;
 }
-.information-slider .custom-slider-park .slider-item-read-more{
-    color: var(--white, #FFF);
-    font-family: "FS Lola Light", Sans-serif;
+.information-slider .custom-slider-park .slider-item-read-more {
+    color: var(--white, #fff);
+    font-family: 'FS Lola Light', Sans-serif;
     font-size: 21px;
     font-style: normal;
     font-weight: 400;
@@ -635,25 +634,26 @@ body h2.top-main-title {
     flex-direction: column;
     justify-content: flex-end;
 }
-.text-transform h2.elementor-heading-title{
+.text-transform h2.elementor-heading-title {
     text-transform: none !important;
 }
-.faq-section .e-n-accordion-item-title{
+.faq-section .e-n-accordion-item-title {
     background-color: #fff;
 }
-.faq-section .e-n-accordion .e-n-accordion-item{
-    border: 1px solid #C2BB86;
+.faq-section .e-n-accordion .e-n-accordion-item {
+    border: 1px solid #c2bb86;
     border-radius: 40px;
     overflow: hidden;
 }
-.faq-section .e-n-accordion .e-n-accordion-item-title-text{
-    color:#003655;
+.faq-section .e-n-accordion .e-n-accordion-item-title-text {
+    color: #003655;
 }
-.faq-section .e-n-accordion .e-n-accordion-item-title .e-closed , .faq-section .e-n-accordion .e-n-accordion-item-title .e-opened{
+.faq-section .e-n-accordion .e-n-accordion-item-title .e-closed,
+.faq-section .e-n-accordion .e-n-accordion-item-title .e-opened {
     align-items: center;
 }
-.news-event-section .elementor-loop-container .e-loop-item .e-con-boxed{
-     border:0px;
+.news-event-section .elementor-loop-container .e-loop-item .e-con-boxed {
+    border: 0px;
 }
 .news-event-section .page-numbers {
     padding: 10px;
@@ -661,7 +661,7 @@ body h2.top-main-title {
     border: 1px solid var(--e-global-color-primary);
     height: 50px;
     width: 50px;
-    font-family: "Optima", Sans-serif;
+    font-family: 'Optima', Sans-serif;
     font-size: 20px;
     text-decoration: none;
     background-color: #fff;
@@ -669,17 +669,17 @@ body h2.top-main-title {
     color: var(--e-global-color-secondary);
     display: inline-block;
 }
-.text-shadow a.elementor-button{
+.text-shadow a.elementor-button {
     text-shadow: none;
 }
 .news-event-section .page-numbers.current {
     background-color: var(--e-global-color-primary);
 }
-.image-caption .wp-caption{
+.image-caption .wp-caption {
     position: relative;
 }
-.image-caption .wp-caption .widget-image-caption{
-    background: #FEFAF1;
+.image-caption .wp-caption .widget-image-caption {
+    background: #fefaf1;
     position: absolute;
     bottom: 18px;
     left: 22px;
@@ -688,35 +688,35 @@ body h2.top-main-title {
 /* .faq-section .e-n-accordion-item-title[aria-expanded="true"]{
     padding-top:28px;
 } */
-.update-date{
-color:#003655;
-font-family: "FS Lola Regular", Sans-serif !important;
-font-weight: normal;
-font-style: normal;
-font-size: 22px;
-font-style: normal;
-font-weight: 400;
-line-height: 30.8px;
-letter-spacing: -0.22px;
+.update-date {
+    color: #003655;
+    font-family: 'FS Lola Regular', Sans-serif !important;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 30.8px;
+    letter-spacing: -0.22px;
 }
-.upcoming-date{
-    color: #C2BB86;
-    font-family: "FS Lola Regular", Sans-serif;
+.upcoming-date {
+    color: #c2bb86;
+    font-family: 'FS Lola Regular', Sans-serif;
     font-weight: normal;
     font-style: normal;
     font-size: 18px;
     font-weight: 400;
     line-height: 135%; /* 24.3px */
 }
-.article-section:hover .upcoming-date{
+.article-section:hover .upcoming-date {
     color: #fff;
 }
-.inner-village-list .elementor-button-icon svg{
+.inner-village-list .elementor-button-icon svg {
     width: 17px;
     height: 17px;
-    fill:transparent !important;
+    fill: transparent !important;
 }
-.back-property{
+.back-property {
     font-family: 'FS Lola' !important;
     font-weight: 500 !important;
     font-style: normal !important;
@@ -731,14 +731,15 @@ letter-spacing: -0.22px;
     width: 100%;
     margin-bottom: 3rem;
 }
-.lightbox .slider-popup-image{
+.lightbox .slider-popup-image {
     flex: 0 0 auto;
     width: 100%;
 }
-.main-top-sec .first-image, .main-top-sec .second-image{
+.main-top-sec .first-image,
+.main-top-sec .second-image {
     cursor: pointer;
 }
-.back-property img{
+.back-property img {
     padding-right: 20px;
 }
 /* .properties-content .slick-slide div {
@@ -754,42 +755,43 @@ letter-spacing: -0.22px;
     width: 100% !important;
     height: auto;
 } */
-.lightbox .slick-list .slick-slide div{
+.lightbox .slick-list .slick-slide div {
     position: relative;
     width: 100%; /* This can be any width */
     padding-top: 56.25%; /* 9/16 = 0.5625 */
     overflow: hidden;
 }
-.lightbox .slick-list .slick-slide div img, .lightbox .slick-list .slick-slide div video{
+.lightbox .slick-list .slick-slide div img,
+.lightbox .slick-list .slick-slide div video {
     position: absolute;
     top: 0;
     left: 0;
     width: 100% !important;
     height: auto;
 }
-.properties-content .lightbox .slick-arrow{
+.properties-content .lightbox .slick-arrow {
     width: 55px;
     height: 55px;
 }
-.gallery-images .elementor-image-gallery img{
-    width:100%;
-    height: 429px;  
+.gallery-images .elementor-image-gallery img {
+    width: 100%;
+    height: 429px;
     object-fit: cover;
 }
-.single-villages .comment-respond{
+.single-villages .comment-respond {
     display: none;
-}  
-.single-galleries .properties-content{
+}
+.single-galleries .properties-content {
     padding: 0px;
     border: 0px;
 }
-.gallery-listing{
-    padding-top:125px;
+.gallery-listing {
+    padding-top: 125px;
 }
 /* .slider-child-image .slick-list .slick-slide div{
     padding-top: 0px;
 } */
-.pagination1{
+.pagination1 {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -805,7 +807,7 @@ letter-spacing: -0.22px;
     justify-content: center;
     height: 50px;
     width: 50px;
-    font-family: "Optima", Sans-serif;
+    font-family: 'Optima', Sans-serif;
     font-size: 20px;
     text-decoration: none;
     background-color: #fff;
@@ -813,15 +815,16 @@ letter-spacing: -0.22px;
     color: var(--e-global-color-secondary);
 }
 .pagination1 .next.page-numbers:after {
-    content: "\f054";
+    content: '\f054';
 }
-.pagination1 .next.page-numbers:after, .pagination1 .prev.page-numbers:after {
-    font-family: "Font Awesome 5 Free";
+.pagination1 .next.page-numbers:after,
+.pagination1 .prev.page-numbers:after {
+    font-family: 'Font Awesome 5 Free';
     font-weight: 800;
     font-size: 13px;
 }
 .pagination1 .page-numbers.prev:after {
-    content: "\f053";
+    content: '\f053';
 }
 .pagination1 .page-numbers.current {
     background-color: #c2bb86;
@@ -839,21 +842,21 @@ letter-spacing: -0.22px;
 .e-loop-item-651 .our-vilage-box .view-village h2.elementor-heading-title {
     max-width: 55%;
 }
-.our-vilage-box .view-village h2.elementor-heading-title{
-	max-width:100%;
+.our-vilage-box .view-village h2.elementor-heading-title {
+    max-width: 100%;
 }
 .single-galleries .gallery-item iframe {
     width: 100%;
     border-radius: 40px;
     height: 100%;
-	background-color: #003655;
+    background-color: #003655;
 }
-.single-post-tag .elementor-post-info__terms-list{
-	display:flex !important;
-	flex-wrap:wrap;
+.single-post-tag .elementor-post-info__terms-list {
+    display: flex !important;
+    flex-wrap: wrap;
 }
-.single-post-tag ul li span.elementor-post-info__terms-list-item{
-    font-family: "FS Lola Regular", Sans-serif;
+.single-post-tag ul li span.elementor-post-info__terms-list-item {
+    font-family: 'FS Lola Regular', Sans-serif;
     font-size: 19px;
     font-weight: 400;
     line-height: 25px;
@@ -864,55 +867,54 @@ letter-spacing: -0.22px;
     border-color: #c2bb86;
     border-radius: 30px;
     margin-right: 18px;
-	margin-bottom:15px;
+    margin-bottom: 15px;
 }
-@media only screen and (max-width:1200px){
+@media only screen and (max-width: 1200px) {
     #map .e-con-inner {
         margin: 0 auto;
     }
 }
-@media only screen and (min-width: 1024px){
-	.pum-container.pum-responsive.pum-responsive-medium {
-		margin-left: -25% !important;
-		width: 50% !important;
-	}
+@media only screen and (min-width: 1024px) {
+    .pum-container.pum-responsive.pum-responsive-medium {
+        margin-left: -25% !important;
+        width: 50% !important;
+    }
 }
 @media only screen and (max-width: 1024px) {
-    .svg-map svg{
+    .svg-map svg {
         width: 100%;
     }
-    .gallery-images .elementor-image-gallery .gallery{
-        margin:0px !important;
+    .gallery-images .elementor-image-gallery .gallery {
+        margin: 0px !important;
     }
-    .gallery-images .gallery-item{
+    .gallery-images .gallery-item {
         padding: 0px 10px 20px 10px !important;
     }
-    .gallery-images .elementor-image-gallery img{
+    .gallery-images .elementor-image-gallery img {
         width: 100%;
         height: auto;
     }
 }
 @media only screen and (max-width: 768px) {
-    
-    .village-post{
+    .village-post {
         flex: 0 0 49.33%;
     }
 }
 @media only screen and (max-width: 767px) {
-    .gallery-images .elementor-image-gallery .gallery{
-        margin:0px !important;
+    .gallery-images .elementor-image-gallery .gallery {
+        margin: 0px !important;
     }
-    .gallery-images .gallery-item{
+    .gallery-images .gallery-item {
         padding: 0 0 20px 0 !important;
     }
-    .gallery-images .elementor-image-gallery img{
+    .gallery-images .elementor-image-gallery img {
         width: 100%;
         height: auto;
     }
-    .sorting{
+    .sorting {
         width: 50%;
     }
-    .sorting #price_sorting{
+    .sorting #price_sorting {
         width: 100%;
     }
     .more-filter.elementor-button.elementor-button-link.elementor-size-sm {
@@ -921,36 +923,35 @@ letter-spacing: -0.22px;
     .villages-list {
         flex-direction: column;
     }
-    .jump-list ul{
+    .jump-list ul {
         flex-direction: column;
         gap: 12px;
     }
-    .custom-slider-park .slick-arrow{
-        width:30px;
+    .custom-slider-park .slick-arrow {
+        width: 30px;
     }
-#popmake-10766,
-#popmake-32688 {
-    padding: 30px 30px;
-    border-radius: 45px;
+    #popmake-10766,
+    #popmake-32688 {
+        padding: 30px 30px;
+        border-radius: 45px;
+    }
 }
+a.book-appointment {
+    color: #1d1d1b;
 }
-a.book-appointment{
-    color: #1D1D1B;
-}
-a.book-appointment:hover{
-    color: #C2BB86 !important;
+a.book-appointment:hover {
+    color: #c2bb86 !important;
 }
 .popmake .popmake-content .wpcf7-response-output {
     color: #fff;
-    font-family: "FS Lola Regular", Sans-serif;
+    font-family: 'FS Lola Regular', Sans-serif;
     padding: 10px;
 }
-.brochure-form select{
+.brochure-form select {
     webkit-appearance: auto !important;
     -moz-appearance: auto !important;
     appearance: auto !important;
 }
-
 
 /* Thank You Page Start */
 .post-block-set .elementor-post__text {
@@ -965,10 +966,10 @@ a.book-appointment:hover{
 }
 .post-block-set .elementor-post__text a.elementor-post__read-more {
     order: 3;
-	position: relative;
+    position: relative;
 }
 .post-block-set .elementor-post__text a.elementor-post__read-more:before {
-    content: "";
+    content: '';
     position: absolute;
     width: 9px;
     height: 14px;
@@ -982,10 +983,10 @@ a.book-appointment:hover{
     border-bottom-right-radius: 40px;
 }
 .post-block-set article.elementor-post:hover .elementor-post__text .elementor-post__meta-data {
-	color: var(--e-global-color-secondary);
+    color: var(--e-global-color-secondary);
 }
 .post-block-set article.elementor-post:hover .elementor-post__text .elementor-post__read-more {
-	color: var(--e-global-color-secondary);
+    color: var(--e-global-color-secondary);
 }
 .post-block-set article.elementor-post:hover .elementor-post__text .elementor-post__title a {
     color: var(--e-global-color-secondary);
@@ -995,26 +996,32 @@ a.book-appointment:hover{
 }
 /* Thank You Page End */
 
-.sherpa-form label{
+.sherpa-form label {
     width: 100%;
     margin-bottom: 10px;
 }
 
-body{
-	padding-top:10px;
+/* Clear the fixed header (below) so it doesn't cover .site-main. Values match
+   the header's rendered height: 68px for the mobile header, 130px for the
+   desktop top bar + nav from 1025px. "html body" rather than "body" because
+   core's global-styles-inline-css prints body{padding-top:0px} after the
+   SiteGround Optimizer combined stylesheet, and at equal specificity it won,
+   leaving the header sitting on top of the page content. */
+html body {
+    padding-top: 68px;
 }
 
-@media(min-width:1025px){
-	body{
-		padding-top:90px;
-	}
+@media (min-width: 1025px) {
+    html body {
+        padding-top: 130px;
+    }
 }
-.elementor-location-header{
-	position:fixed;
-	top:0;
-	width:100%;
-	left:0;
-	z-index:999999;
+.elementor-location-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    left: 0;
+    z-index: 999999;
 }
 
 /* The header's z-index (above) is 999999; core gives #wpadminbar 99999, so the
@@ -1025,54 +1032,60 @@ body{
    rather than lowering its z-index, which would drop it under the mega-menu
    overlays. --wp-admin--admin-bar--height is set by core on <html> (32px, 46px
    under 782px); the 0px fallback makes this a no-op if it ever goes away. */
-.admin-bar .elementor-location-header{
-	top:var(--wp-admin--admin-bar--height, 0px);
+.admin-bar .elementor-location-header {
+    top: var(--wp-admin--admin-bar--height, 0px);
 }
 
 /* Under 600px core switches #wpadminbar to position:absolute so it scrolls
    away - the header must sit flush again or it leaves a 46px gap. */
-@media screen and (max-width:600px){
-	.admin-bar .elementor-location-header{
-		top:0;
-	}
+@media screen and (max-width: 600px) {
+    .admin-bar .elementor-location-header {
+        top: 0;
+    }
 }
 
 .back-btn .elementor-button {
-	fill: var(--e-global-color-secondary) !important;
+    fill: var(--e-global-color-secondary) !important;
     color: var(--e-global-color-secondary) !important;
-    background-color: #FFFFFF00 !important;
+    background-color: #ffffff00 !important;
     border-radius: 0px 0px 0px 0px !important;
     padding: 0px 0px 0px 0px !important;
 }
-.back-btn .elementor-button-text{
-	padding-left:15px;
+.back-btn .elementor-button-text {
+    padding-left: 15px;
 }
 
-.main-hero-images-set .all-main-btn-set .property-amenities ul li, .properties-filter-row .main-condition .amenities label{
+.main-hero-images-set .all-main-btn-set .property-amenities ul li,
+.properties-filter-row .main-condition .amenities label {
     text-transform: capitalize;
 }
-.brochure-download{
+.brochure-download {
     background-color: #fff !important;
     color: #003655 !important;
 }
-.brochure-download:hover{
-	background-color: #c2bb86 !important;
+.brochure-download:hover {
+    background-color: #c2bb86 !important;
 }
-.say-hello .elementor-icon-list-icon{
-	background-color: var(--e-global-color-primary) !important;
+.say-hello .elementor-icon-list-icon {
+    background-color: var(--e-global-color-primary) !important;
 }
-@media(max-width:767px){
-	.our-vilage-box .brochure-button{
-		min-height:30px !important;
-	}
+@media (max-width: 767px) {
+    .our-vilage-box .brochure-button {
+        min-height: 30px !important;
+    }
 }
-.click-popup-button{
+.click-popup-button {
     margin-bottom: 25px !important;
 }
 #brochure-link-container {
     display: block;
 }
-#mega-menu-wrap-menu-1 #mega-menu-menu-1>li.mega-menu-tabbed>ul.mega-sub-menu>li.mega-menu-item>ul.mega-sub-menu {
-  top: 0 !important;
-  padding: 0px 0px 0px 0px !important;
+#mega-menu-wrap-menu-1
+    #mega-menu-menu-1
+    > li.mega-menu-tabbed
+    > ul.mega-sub-menu
+    > li.mega-menu-item
+    > ul.mega-sub-menu {
+    top: 0 !important;
+    padding: 0px 0px 0px 0px !important;
 }
